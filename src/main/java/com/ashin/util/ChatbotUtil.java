@@ -23,8 +23,10 @@ public class ChatbotUtil {
 
     @Resource
     private MessageEventHandler messageEventHandler;
-    private static final Map<String,Chatbot> chatbotMap = new HashMap<>();
+    private static final Map<String, Chatbot> chatbotMap = new HashMap<>();
     private static String sessionToken;
+    private static String cfClearance;
+    private static String userAgent;
     private static Long qq;
     private static String password;
     private static Bot qqBot;
@@ -32,6 +34,14 @@ public class ChatbotUtil {
     @Value("${sessionToken}")
     public void setSessionToken(String sessionToken) {
         ChatbotUtil.sessionToken = sessionToken;
+    }
+    @Value("${cfClearance}")
+    public void setCfClearance(String cfClearance) {
+        ChatbotUtil.cfClearance = cfClearance;
+    }
+    @Value("${userAgent}")
+    public void setUserAgent(String userAgent) {
+        ChatbotUtil.userAgent = userAgent;
     }
 
     @Value("${qq}")
@@ -61,7 +71,13 @@ public class ChatbotUtil {
      */
     public static Chatbot getChatbot(String sessionId){
         if(chatbotMap.containsKey(sessionId)) return chatbotMap.get(sessionId);
-        Chatbot chatbot = new Chatbot(sessionToken);
+
+//        用于调试是否配置正确
+//        System.out.println("sessionToken:"+sessionToken);
+//        System.out.println("cfClearance:"+cfClearance);
+//        System.out.println("userAgent:"+userAgent);
+
+        Chatbot chatbot = new Chatbot(sessionToken,cfClearance,userAgent);
         chatbotMap.put(sessionId,chatbot);
         return chatbot;
     }
