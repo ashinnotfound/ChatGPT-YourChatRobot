@@ -10,7 +10,7 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 ## 使用
 
-❤❤❤**开箱即用！！！**❤❤❤
+❤❤❤ 开箱即用!!! ❤❤❤
 
 你只需要
 
@@ -31,8 +31,8 @@ sessionToken = ""
 cfClearance = ""
 userAgent = ""
 #qq
-qq = 123456
-password = 123456
+qq = 123456 //qq账号
+password = 123456 //qq密码
 ```
 
 3.  然后 run！！！😁😁😁
@@ -41,15 +41,17 @@ password = 123456
 
 ### 你可能需要了解:
 
--   sessionToken、cfClearance获取方法
+-   sessionToken、cfClearance、userAgent获取方法
 
     1.  登录ChatGPT
     2.  打开浏览器开发者工具，切换到 `Application` 标签页。
-    3.  在左侧的 `Storage - Cookies` 中找到 `__Secure-next-auth.session-token` 一行并复制其值
-    4.  同时找到`cf_clearance`一行并复制其值
-    5.  userAgent可在`NetWork`中找到
+    3.  在左侧的 `Storage - Cookies` 中找到 `__Secure-next-auth.session-token` 一行并复制其值,此为sessionToken的值
+    4.  同时找到`cf_clearance`一行并复制其值，此为cfClearance的值
+    5.  切换到`NetWork`标签页，在随意一个活动里的`Headers`即可找到`User-Agent`，此为userAgent的值
 
     参考:https://github.com/acheong08/ChatGPT/wiki/Setup#token-authentication
+    
+    tips：亲测，在获取上述值的时候不要开代理，否则在使用时会报403错误，即拒绝访问🤔
 
 -   第一次使用时可能会遇到滑动验证码问题
 
