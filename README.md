@@ -1,3 +1,4 @@
+# 😢😢😢目前g了，抢修中！！！
 # ChatGPT-QQRobot
 
 ## 简介
