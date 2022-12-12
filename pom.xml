@@ -34,12 +34,11 @@
             <artifactId>lombok</artifactId>
         </dependency>
 
-        <!--        该依赖的开发者未发布1.1.1的maven依赖，故采用手动导包的方式       -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.github.plexpt</groupId>-->
-        <!--            <artifactId>chatgpt</artifactId>-->
-        <!--            <version>1.1.1</version>-->
-        <!--        </dependency>-->
+        <dependency>
+            <groupId>com.github.plexpt</groupId>
+            <artifactId>chatgpt</artifactId>
+            <version>1.1.2</version>
+        </dependency>
         <dependency>
             <groupId>net.mamoe</groupId>
             <artifactId>mirai-core-jvm</artifactId>
