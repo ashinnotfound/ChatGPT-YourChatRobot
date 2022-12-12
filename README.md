@@ -1,4 +1,3 @@
-# 😢😢😢目前g了，抢修中！！！
 # ChatGPT-QQRobot
 
 ## 简介
@@ -27,7 +26,11 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 ```
 //这是application.properties文件
-sessionToken = xxx
+#ChatGPT
+sessionToken = ""
+cfClearance = ""
+userAgent = ""
+#qq
 qq = 123456
 password = 123456
 ```
@@ -38,11 +41,13 @@ password = 123456
 
 ### 你可能需要了解:
 
--   sessionToken获取方法
+-   sessionToken、cfClearance获取方法
 
     1.  登录ChatGPT
     2.  打开浏览器开发者工具，切换到 `Application` 标签页。
     3.  在左侧的 `Storage - Cookies` 中找到 `__Secure-next-auth.session-token` 一行并复制其值
+    4.  同时找到`cf_clearance`一行并复制其值
+    5.  userAgent可在`NetWork`中找到
 
     参考:https://github.com/acheong08/ChatGPT/wiki/Setup#token-authentication
 
