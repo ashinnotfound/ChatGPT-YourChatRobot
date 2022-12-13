@@ -68,4 +68,4 @@ password = 123456 //qq密码
 若使用过程中遇到问题或bug，请告知我，谢谢👨‍🔧😎
 
 看,星星！✨
-![stars](https://starchart.cc/ashinnotfound/ChatGPT-QQRobot.svg)
+[![Star History Chart](https://api.star-history.com/svg?repos=ashinnotfound/ChatGPT-QQRobot&type=Date)](https://star-history.com/#ashinnotfound/ChatGPT-QQRobot&Date)
