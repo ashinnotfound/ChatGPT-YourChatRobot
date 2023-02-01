@@ -6,7 +6,7 @@ import lombok.Data;
  * 聊天BO
  *
  * @author ashinnotfound
- * @date 2022/12/10
+ * @date 2023/02/01
  */
 @Data
 public class ChatBO {
@@ -17,5 +17,5 @@ public class ChatBO {
     /**
      * 问题
      */
-    private String question;
+    private String prompt;
 }
