@@ -4,9 +4,9 @@
 
 an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
-这是一个**非官方**的基于[chatgpt-java](https://github.com/PlexPt/chatgpt-java.git)和[mirai](https://github.com/mamoe/mirai.git)实现的**qq机器人版**ChatGPT，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。
+这是一个**非官方**的基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mirai](https://github.com/mamoe/mirai.git)实现的**qq机器人版**ChatGPT，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。
 
-🌹🌹🌹再次感谢[chatgpt-java](https://github.com/PlexPt/chatgpt-java.git)和[mirai](https://github.com/mamoe/mirai.git) 🌹🌹🌹
+🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mirai](https://github.com/mamoe/mirai.git) 🌹🌹🌹
 
 ## 使用
 
@@ -18,7 +18,7 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 2.  拥有
 
-    -   一个ChatGPT账号
+    -   一个OpenApi账号
 
     -   一个qq号
 
@@ -26,13 +26,12 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 ```
 //这是application.properties文件
+#注意不用加双引号
 #ChatGPT
-sessionToken = ""
-cfClearance = ""
-userAgent = ""
+apiKey = xxx
 #qq
 qq = 123456 //qq账号
-password = 123456 //qq密码
+password = xxx //qq密码
 ```
 
 3.  然后 run！！！😁😁😁
@@ -41,17 +40,8 @@ password = 123456 //qq密码
 
 ### 你可能需要了解:
 
--   sessionToken、cfClearance、userAgent获取方法
-
-    1.  登录ChatGPT
-    2.  打开浏览器开发者工具，切换到 `Application` 标签页。
-    3.  在左侧的 `Storage - Cookies` 中找到 `__Secure-next-auth.session-token` 一行并复制其值,此为sessionToken的值
-    4.  同时找到`cf_clearance`一行并复制其值，此为cfClearance的值
-    5.  切换到`NetWork`标签页，在随意一个活动里的`Headers`即可找到`User-Agent`，此为userAgent的值
-
-    参考:https://github.com/acheong08/ChatGPT/wiki/Setup#token-authentication
-    
-    tips：亲测，在获取上述值的时候不要开代理，否则在使用时会报403错误，即拒绝访问🤔
+-   获取apiKey
+    https://platform.openai.com/account/api-keys
 
 -   第一次使用时可能会遇到滑动验证码问题
 
