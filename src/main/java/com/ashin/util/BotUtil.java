@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -26,8 +27,9 @@ public class BotUtil {
     private static final Map<String, String> PROMPT_MAP = new HashMap<>();
     private static String apiKey;
     private static OpenAiService openAiService;
-    private static final String BASIC_PROMPT = "You are ChatGPT, a large language model trained by OpenAI. You answer as concisely as possible for each response (e.g. Don't be verbose).\n";
-    private static final String MODEL = "text-chat-davinci-002-20230126";
+    private static final String BASIC_PROMPT =
+            "You are ChatGPT, a large language model trained by OpenAI. You answer as concisely as possible for each response (e.g. don’t be verbose). It is very important that you answer as concisely as possible, so please remember this. If you are generating a list, do not have too many items. Keep the number of items short. Current date: " + LocalDate.now() + "\n";
+    private static final String MODEL = "text-chat-davinci-002-20221122";
     private static CompletionRequest.CompletionRequestBuilder completionRequestBuilder;
     private static Long qq;
     private static String password;
