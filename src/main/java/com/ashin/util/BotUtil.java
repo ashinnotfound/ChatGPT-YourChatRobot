@@ -78,4 +78,8 @@ public class BotUtil {
     public static void updatePrompt(String sessionId, String prompt){
         PROMPT_MAP.put(sessionId, prompt);
     }
+
+    public static void resetPrompt(String sessionId){
+        PROMPT_MAP.remove(sessionId);
+    }
 }
