@@ -52,7 +52,7 @@ public class BotUtil {
 
     @PostConstruct
     public void init() {
-        openAiService = new OpenAiService(apiKey, Duration.ofSeconds(100));
+        openAiService = new OpenAiService(apiKey, Duration.ofSeconds(1000));
         completionRequestBuilder = CompletionRequest.builder().model(MODEL).temperature(0.5).maxTokens(1024).echo(true);
         //qq登录
         BotUtil.qqBot = BotFactory.INSTANCE.newBot(qq,password);

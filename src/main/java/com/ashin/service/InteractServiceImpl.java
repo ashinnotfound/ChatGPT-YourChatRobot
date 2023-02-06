@@ -24,12 +24,9 @@ public class InteractServiceImpl implements InteractService{
         CompletionRequest.CompletionRequestBuilder completionRequestBuilder = BotUtil.getCompletionRequestBuilder();
         CompletionRequest completionRequest = completionRequestBuilder.prompt(prompt).build();
         String text = openAiService.createCompletion(completionRequest).getChoices().get(0).getText();
-        String[] textSpilled = text.split(chatBO.getPrompt() + "\nChatGPT: ");
-        String answer = textSpilled[textSpilled.length - 1];
-
+        String answer = text.replace(prompt, " ").trim();
         BotUtil.updatePrompt(chatBO.getSessionId(), prompt + answer);
-        answer = textSpilled[textSpilled.length - 1].replace("<|im_end|>", "").trim();
-
+        answer = answer.replace("<|im_end|>", "").trim();
         return answer;
     }
 }
