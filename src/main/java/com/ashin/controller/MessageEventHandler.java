@@ -7,7 +7,6 @@ import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
 import net.mamoe.mirai.event.events.MessageEvent;
 import net.mamoe.mirai.message.data.At;
-import net.mamoe.mirai.message.data.SingleMessage;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
@@ -35,33 +34,29 @@ public class MessageEventHandler implements ListenerHost {
     public void onMessage(@NotNull MessageEvent event) {
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
-        if(event.getBot().getGroups().contains(event.getSubject().getId())) {
+        if (event.getBot().getGroups().contains(event.getSubject().getId())) {
             //如果是在群聊
-            //遍历收到的消息元素
-            for (SingleMessage singleMessage : event.getMessage()) {
-                if (singleMessage.equals(new At(event.getBot().getId()))) {
-                    //存在@机器人的消息就向ChatGPT提问
-                    //去除@再提问
-                    String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
-                    if (RESET_WORD.equals(prompt)){
-                        //检测到重置会话指令
-                        BotUtil.resetPrompt(chatBO.getSessionId());
-                        event.getSubject().sendMessage("重置会话成功");
-                    }else {
-                        chatBO.setPrompt(prompt);
-                        event.getSubject().sendMessage(interactService.chat(chatBO));
-                    }
-                    break;
+            if (event.getMessage().contains(new At(event.getBot().getId()))) {
+                //存在@机器人的消息就向ChatGPT提问
+                //去除@再提问
+                String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
+                if (RESET_WORD.equals(prompt)) {
+                    //检测到重置会话指令
+                    BotUtil.resetPrompt(chatBO.getSessionId());
+                    event.getSubject().sendMessage("重置会话成功");
+                } else {
+                    chatBO.setPrompt(prompt);
+                    event.getSubject().sendMessage(interactService.chat(chatBO));
                 }
             }
-        }else {
+        } else {
             //不是在群聊 则直接回复
             String prompt = event.getMessage().contentToString().trim();
-            if (RESET_WORD.equals(prompt)){
+            if (RESET_WORD.equals(prompt)) {
                 //检测到重置会话指令
                 BotUtil.resetPrompt(chatBO.getSessionId());
                 event.getSubject().sendMessage("重置会话成功");
-            }else {
+            } else {
                 chatBO.setPrompt(prompt);
                 event.getSubject().sendMessage(interactService.chat(chatBO));
             }
