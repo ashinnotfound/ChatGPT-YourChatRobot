@@ -1,6 +1,7 @@
 package com.ashin.util;
 
 import com.ashin.controller.MessageEventHandler;
+import com.ashin.exception.ChatException;
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionRequest;
 import net.mamoe.mirai.Bot;
@@ -11,8 +12,7 @@ import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * chatbot工具类
@@ -24,12 +24,13 @@ import java.util.Map;
 public class BotUtil {
     @Resource
     private MessageEventHandler messageEventHandler;
-    private static final Map<String, String> PROMPT_MAP = new HashMap<>();
+    private static final Map<String, Queue<String>> PROMPT_MAP = new HashMap<>();
     private static String apiKey;
     private static OpenAiService openAiService;
     private static final String BASIC_PROMPT =
             "You are ChatGPT, a large language model trained by OpenAI. You answer as concisely as possible for each response (e.g. don’t be verbose). It is very important that you answer as concisely as possible, so please remember this. If you are generating a list, do not have too many items. Keep the number of items short. Current date: " + LocalDate.now() + "\n";
-    private static final String MODEL = "text-chat-davinci-002-20221122";
+    private static final String MODEL = "text-davinci-003";
+    private static final Integer MAX_TOKEN = 2048;
     private static CompletionRequest.CompletionRequestBuilder completionRequestBuilder;
     private static Long qq;
     private static String password;
@@ -53,7 +54,7 @@ public class BotUtil {
     @PostConstruct
     public void init() {
         openAiService = new OpenAiService(apiKey, Duration.ofSeconds(1000));
-        completionRequestBuilder = CompletionRequest.builder().model(MODEL).temperature(0.5).maxTokens(1024).echo(true);
+        completionRequestBuilder = CompletionRequest.builder().model(MODEL).temperature(0.5).maxTokens(MAX_TOKEN);
         //qq登录
         BotUtil.qqBot = BotFactory.INSTANCE.newBot(qq,password);
         qqBot.login();
@@ -68,15 +69,34 @@ public class BotUtil {
         return completionRequestBuilder;
     }
 
-    public static String getPrompt(String sessionId){
-        if (!PROMPT_MAP.containsKey(sessionId)){
-            updatePrompt(sessionId, BASIC_PROMPT);
+    public static String getPrompt(String sessionId, String newPrompt) throws ChatException {
+        StringBuilder prompt = new StringBuilder(BASIC_PROMPT);
+        if (PROMPT_MAP.containsKey(sessionId)){
+            for (String s : PROMPT_MAP.get(sessionId)){
+                prompt.append(s);
+            }
         }
-        return PROMPT_MAP.get(sessionId);
+        prompt.append("User: ").append(newPrompt).append("\nChatGPT: ");
+
+        //在中文分词中，一个 token 可能对应一个单字，也可能对应一个词组
+        if (MAX_TOKEN < prompt.toString().length()){
+            if (null == PROMPT_MAP.get(sessionId) || null == PROMPT_MAP.get(sessionId).poll()){
+                throw new ChatException("问题太长了");
+            }
+            return getPrompt(sessionId, newPrompt);
+        }
+
+        return prompt.toString();
     }
 
-    public static void updatePrompt(String sessionId, String prompt){
-        PROMPT_MAP.put(sessionId, prompt);
+    public static void updatePrompt(String sessionId, String prompt, String answer){
+        if (PROMPT_MAP.containsKey(sessionId)){
+            PROMPT_MAP.get(sessionId).offer("User: " + prompt + "\nChatGPT: " + answer);
+        }else {
+            Queue<String> queue = new LinkedList<>();
+            queue.offer("User: " + prompt + "\nChatGPT: " + answer);
+            PROMPT_MAP.put(sessionId, queue);
+        }
     }
 
     public static void resetPrompt(String sessionId){

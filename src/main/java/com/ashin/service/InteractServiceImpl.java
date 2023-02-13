@@ -1,6 +1,7 @@
 package com.ashin.service;
 
 import com.ashin.bo.ChatBO;
+import com.ashin.exception.ChatException;
 import com.ashin.util.BotUtil;
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionRequest;
@@ -15,17 +16,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class InteractServiceImpl implements InteractService{
     @Override
-    public String chat(ChatBO chatBO) {
+    public String chat(ChatBO chatBO) throws ChatException {
 
-        String prompt = BotUtil.getPrompt(chatBO.getSessionId()) + "User: " + chatBO.getPrompt() + "\nChatGPT: ";
+        String prompt = BotUtil.getPrompt(chatBO.getSessionId(), chatBO.getPrompt());
 
         //向gpt提问
         OpenAiService openAiService = BotUtil.getOpenAiService();
         CompletionRequest.CompletionRequestBuilder completionRequestBuilder = BotUtil.getCompletionRequestBuilder();
+
         CompletionRequest completionRequest = completionRequestBuilder.prompt(prompt).build();
-        String text = openAiService.createCompletion(completionRequest).getChoices().get(0).getText();
-        String answer = text.replace(prompt, " ").trim();
-        BotUtil.updatePrompt(chatBO.getSessionId(), prompt + answer);
+        String answer = openAiService.createCompletion(completionRequest).getChoices().get(0).getText();
+
+        //去除gpt假设的用户提问
+        int userIndex = answer.indexOf("User:");
+        if (-1 != userIndex){
+            answer = answer.substring(0, userIndex - 1) + "<|im_end|>";
+        }
+
+        BotUtil.updatePrompt(chatBO.getSessionId(), chatBO.getPrompt(), answer);
         answer = answer.replace("<|im_end|>", "").trim();
         return answer;
     }

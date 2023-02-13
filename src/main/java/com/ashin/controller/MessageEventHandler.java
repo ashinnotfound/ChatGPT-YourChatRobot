@@ -1,6 +1,7 @@
 package com.ashin.controller;
 
 import com.ashin.bo.ChatBO;
+import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
 import net.mamoe.mirai.event.EventHandler;
@@ -31,7 +32,7 @@ public class MessageEventHandler implements ListenerHost {
      * @param event 事件 ps:此处是MessageEvent 故所有的消息事件都会被监听
      */
     @EventHandler
-    public void onMessage(@NotNull MessageEvent event) {
+    public void onMessage(@NotNull MessageEvent event){
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
         if (event.getBot().getGroups().contains(event.getSubject().getId())) {
@@ -40,25 +41,26 @@ public class MessageEventHandler implements ListenerHost {
                 //存在@机器人的消息就向ChatGPT提问
                 //去除@再提问
                 String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
-                if (RESET_WORD.equals(prompt)) {
-                    //检测到重置会话指令
-                    BotUtil.resetPrompt(chatBO.getSessionId());
-                    event.getSubject().sendMessage("重置会话成功");
-                } else {
-                    chatBO.setPrompt(prompt);
-                    event.getSubject().sendMessage(interactService.chat(chatBO));
-                }
+                response(event, chatBO, prompt);
             }
         } else {
             //不是在群聊 则直接回复
             String prompt = event.getMessage().contentToString().trim();
-            if (RESET_WORD.equals(prompt)) {
-                //检测到重置会话指令
-                BotUtil.resetPrompt(chatBO.getSessionId());
-                event.getSubject().sendMessage("重置会话成功");
-            } else {
+            response(event, chatBO, prompt);
+        }
+    }
+
+    private void response(@NotNull MessageEvent event, ChatBO chatBO, String prompt) {
+        if (RESET_WORD.equals(prompt)) {
+            //检测到重置会话指令
+            BotUtil.resetPrompt(chatBO.getSessionId());
+            event.getSubject().sendMessage("重置会话成功");
+        } else {
+            try {
                 chatBO.setPrompt(prompt);
                 event.getSubject().sendMessage(interactService.chat(chatBO));
+            }catch (ChatException e){
+                event.getSubject().sendMessage(e.getMessage());
             }
         }
     }
