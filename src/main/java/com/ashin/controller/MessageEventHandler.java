@@ -8,6 +8,9 @@ import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
 import net.mamoe.mirai.event.events.MessageEvent;
 import net.mamoe.mirai.message.data.At;
+import net.mamoe.mirai.message.data.MessageChain;
+import net.mamoe.mirai.message.data.MessageChainBuilder;
+import net.mamoe.mirai.message.data.QuoteReply;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
@@ -56,12 +59,18 @@ public class MessageEventHandler implements ListenerHost {
             BotUtil.resetPrompt(chatBO.getSessionId());
             event.getSubject().sendMessage("重置会话成功");
         } else {
+            String response;
             try {
                 chatBO.setPrompt(prompt);
-                event.getSubject().sendMessage(interactService.chat(chatBO));
+                response = interactService.chat(chatBO);
             }catch (ChatException e){
-                event.getSubject().sendMessage(e.getMessage());
+                response = e.getMessage();
             }
+            MessageChain messages = new MessageChainBuilder()
+                    .append(new QuoteReply(event.getMessage()))
+                    .append(response)
+                    .build();
+            event.getSubject().sendMessage(messages);
         }
     }
 }
