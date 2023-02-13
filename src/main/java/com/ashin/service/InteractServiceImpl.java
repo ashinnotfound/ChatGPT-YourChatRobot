@@ -33,7 +33,7 @@ public class InteractServiceImpl implements InteractService{
             answer = openAiService.createCompletion(completionRequest).getChoices().get(0).getText();
         }catch (HttpException e){
             log.error("向gpt提问失败，提问内容：{}，原因：{}", chatBO.getPrompt(), e.getMessage(), e);
-            if (500 == e.code() || 503 == e.code()){
+            if (500 == e.code() || 503 == e.code() || 429 == e.code()){
                 log.info("尝试重新发送");
                 try {
                     //可能是同时请求过多，尝试重新发送
