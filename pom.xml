@@ -10,8 +10,8 @@
     </parent>
     <groupId>com.ashin</groupId>
     <artifactId>ChatGPT-QQRobot</artifactId>
-    <version>2.0</version>
-    <name>myChatGPT</name>
+    <version>2.5</version>
+    <name>myGPT</name>
     <description>come and make your GPT</description>
     <properties>
         <java.version>1.8</java.version>
