@@ -30,20 +30,27 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
         并把它们配置在application.properties里:
 
 ```
-//这是application.properties文件
+//这是application.yml文件
 #注意不用加双引号
 #ChatGPT
-apiKey = xxx
+#有多少apiKey就写多少，不要留空白
+apiKey:
+  - sk-xxxx
+  - sk-xxxx
+  - sk-xxxx
+
 #qq
-qq = 123456 //qq账号
-password = xxx //qq密码
+qq : 123456
+password : xxxx
 ```
 
 3.  然后 run！！！😁😁😁
 
 此时你的qq便是ChatGPT了！！！✨✨✨
 
-### tips:默认情况下，在群聊需@才会回复，向机器人发送 “重置会话” 可以使会话重置。机器人响应速度与你的网络环境挂钩。
+### tips:
+- 默认情况下，在群聊需@才会回复，向机器人发送 “重置会话” 可以使会话重置。机器人响应速度与你的网络环境挂钩。
+- 支持多个apiKey
 
 ### 你可能需要了解:
 
