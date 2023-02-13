@@ -13,6 +13,12 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git) 🌹🌹🌹
 
+## 特性
+- 回复为引用回复，且默认情况下，在群聊需@才会回复
+- 支持上下文对话。向机器人发送 “重置会话” 可以清除会话历史
+- 支持使用多个apiKey。在此情况下，会优先调用使用次数最少的apiKey，达到避免同一个api请求过多造成的Http500/503问题的目的
+- （***开发中🥳***）网页控制台功能，更方便地控制你的GPT
+
 ## 使用
 
 ❤❤❤ 开箱即用!!! ❤❤❤
@@ -31,7 +37,6 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 ```
 //这是application.yml文件
-#注意不用加双引号
 #ChatGPT
 #有多少apiKey就写多少，不要留空白
 apiKey:
@@ -48,9 +53,7 @@ password : xxxx
 
 此时你的qq便是ChatGPT了！！！✨✨✨
 
-### tips:
-- 默认情况下，在群聊需@才会回复，向机器人发送 “重置会话” 可以使会话重置。机器人响应速度与你的网络环境挂钩。
-- 支持多个apiKey
+tips：机器人响应速度与你的网络环境挂钩。
 
 ### 你可能需要了解:
 
