@@ -1,7 +1,7 @@
 # ChatGPT-QQRobot
 
 ## 我觉得我应该让你们知晓
-因为chatgpt似乎删除或者隐藏了其模型（自从Feb 8, 2023），因此本项目现在调用的并**不是**chatgpt，而是openai的一个GPT-3模型：text-davinci-003。具体可前往下文的 *版本-v2.5* 查看。
+openai似乎删除或者隐藏了原先的chatgpt模型（自从Feb 8, 2023），因此本项目现在调用的并**不是**chatgpt，而是openai的一个GPT-3模型：text-davinci-003（chatgpt也是openai的一个GPT-3模型）。具体可前往下文的 *版本-v2.5* 查看。
 
 
 
