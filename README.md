@@ -27,7 +27,7 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
     -   一个qq号
 
-        并把它们配置在application.properties里:
+        并把它们配置在application.yml里:
 
 ```
 //这是application.yml文件
