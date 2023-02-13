@@ -1,5 +1,9 @@
-# 目前无法使用😢--from 2023.2.8
 # ChatGPT-QQRobot
+
+## 我觉得我应该让你们知晓
+因为chatgpt似乎删除或者隐藏了其模型（自从Feb 8, 2023），因此本项目现在调用的并**不是**chatgpt，而是openai的一个GPT-3模型：text-davinci-003。具体可前往下文的 *版本-v2.5* 查看。
+
+
 
 ## 简介
 
@@ -61,6 +65,15 @@ password = xxx //qq密码
 ### v?.? (FUTURE)
 
 - 期待chatgpt官方api的发布
+
+### v2.5 (Feb 13, 2023)
+- 基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
+
+- chatgpt似乎删除了或者隐藏了其模型，原有方法已不再适用。因此现在使用的是并**不是**chatgpt模型，而是openai的[GPT-3](https://platform.openai.com/docs/models/gpt-3)模型：text-davinci-003
+- openai对其的介绍：
+
+    Most capable GPT-3 model. Can do any task the other models can do, often with higher quality, longer output and better instruction-following. Also supports [inserting](https://platform.openai.com/docs/guides/completion/inserting-text) completions within text.
+    功能最强大的GPT-3模型。可以做任何其他模型可以做的任务，通常具有更高的质量，更长的输出和更好的指令遵循。也支持[插入](https://platform.openai.com/docs/guides/completion/inserting-text)补全文本。
 
 ### v2.0 (Feb 2, 2023)
 
