@@ -79,8 +79,8 @@ public class BotUtil {
         prompt.append("User: ").append(newPrompt).append("\nChatGPT: ");
 
         //一个汉字大概两个token
-        //预设回答的文字与提问的文字数量相当
-        if (MAX_TOKEN < (prompt.toString().length() + newPrompt.length()) * 2){
+        //预设回答的文字是提问文字数量的两倍
+        if (MAX_TOKEN < (prompt.toString().length() + newPrompt.length() * 2) * 2){
             if (null == PROMPT_MAP.get(sessionId) || null == PROMPT_MAP.get(sessionId).poll()){
                 throw new ChatException("问题太长了");
             }

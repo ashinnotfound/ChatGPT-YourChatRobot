@@ -4,6 +4,8 @@ import com.ashin.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
+import lombok.extern.slf4j.Slf4j;
+import net.mamoe.mirai.contact.MessageTooLargeException;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
 import net.mamoe.mirai.event.events.MessageEvent;
@@ -22,6 +24,7 @@ import javax.annotation.Resource;
  * @date 2023/2/1
  */
 @Component
+@Slf4j
 public class MessageEventHandler implements ListenerHost {
     @Resource
     private InteractService interactService;
@@ -66,11 +69,16 @@ public class MessageEventHandler implements ListenerHost {
             }catch (ChatException e){
                 response = e.getMessage();
             }
-            MessageChain messages = new MessageChainBuilder()
-                    .append(new QuoteReply(event.getMessage()))
-                    .append(response)
-                    .build();
-            event.getSubject().sendMessage(messages);
+            try {
+                MessageChain messages = new MessageChainBuilder()
+                        .append(new QuoteReply(event.getMessage()))
+                        .append(response)
+                        .build();
+                event.getSubject().sendMessage(messages);
+            }catch (MessageTooLargeException e){
+                log.warn("信息太大，无法引用，采用直接回复");
+                event.getSubject().sendMessage(response);
+            }
         }
     }
 }
