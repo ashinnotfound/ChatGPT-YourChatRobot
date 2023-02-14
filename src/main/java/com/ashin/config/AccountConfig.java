@@ -13,7 +13,7 @@ import java.util.List;
  */
 @Data
 @Component
-@ConfigurationProperties
+@ConfigurationProperties("account")
 public class AccountConfig {
     private List<String> apiKey;
 

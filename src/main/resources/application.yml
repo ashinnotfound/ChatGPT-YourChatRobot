@@ -1,11 +1,9 @@
-#注意不用加双引号
-#ChatGPT
-#有多少apiKey就写多少，不要留空白
-apiKey:
-  - sk-xxxx
-  - sk-xxxx
-  - sk-xxxx
+account:
+  #qq
+  qq: 123456
+  password: xxxx
 
-#qq
-qq : 123456
-password : xxxx
+  #ChatGPT
+  apiKey:
+   - sk-xxxx
+   - sk-xxxx
