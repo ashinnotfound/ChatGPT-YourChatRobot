@@ -29,7 +29,7 @@ public class BotUtil {
     @Resource
     private MessageEventHandler messageEventHandler;
     private static final Map<String, Queue<String>> PROMPT_MAP = new HashMap<>();
-    private static final Map<OpenAiService, Integer> countForOpenAiService = new HashMap<>();
+    private static final Map<OpenAiService, Integer> COUNT_FOR_OPEN_AI_SERVICE = new HashMap<>();
     private static String basicPrompt;
     private static Integer maxToken;
     private static CompletionRequest.CompletionRequestBuilder completionRequestBuilder;
@@ -44,7 +44,7 @@ public class BotUtil {
         for (String apiKey : accountConfig.getApiKey()){
             apiKey = apiKey.trim();
             if (!"".equals(apiKey)){
-                countForOpenAiService.put(new OpenAiService(apiKey, Duration.ofSeconds(1000)), 0);
+                COUNT_FOR_OPEN_AI_SERVICE.put(new OpenAiService(apiKey, Duration.ofSeconds(1000)), 0);
                 log.info("apiKey为 {} 的账号初始化成功", apiKey);
             }
         }
@@ -62,10 +62,16 @@ public class BotUtil {
 
     public static OpenAiService getOpenAiService(){
         //获取使用次数最小的openAiService 否则获取map中的第一个
-        Optional<OpenAiService> openAiServiceToUse = countForOpenAiService.entrySet().stream()
+        Optional<OpenAiService> openAiServiceToUse = COUNT_FOR_OPEN_AI_SERVICE.entrySet().stream()
         .min(Map.Entry.comparingByValue())
         .map(Map.Entry::getKey);
-        return openAiServiceToUse.orElseGet(() -> countForOpenAiService.keySet().iterator().next());
+        if (openAiServiceToUse.isPresent()){
+            COUNT_FOR_OPEN_AI_SERVICE.put(openAiServiceToUse.get(), COUNT_FOR_OPEN_AI_SERVICE.get(openAiServiceToUse.get()) + 1);
+            return  openAiServiceToUse.get();
+        }else {
+            COUNT_FOR_OPEN_AI_SERVICE.put(COUNT_FOR_OPEN_AI_SERVICE.keySet().iterator().next(), COUNT_FOR_OPEN_AI_SERVICE.get(COUNT_FOR_OPEN_AI_SERVICE.keySet().iterator().next()) + 1);
+            return COUNT_FOR_OPEN_AI_SERVICE.keySet().iterator().next();
+        }
     }
     public static CompletionRequest.CompletionRequestBuilder getCompletionRequestBuilder(){
         return completionRequestBuilder;
