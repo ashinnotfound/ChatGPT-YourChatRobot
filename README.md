@@ -11,6 +11,10 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git) 🌹🌹🌹
 
+## 原理
+
+使用mirai登录qq并监听消息->调用openai接口将消息向gpt提问->使用mirai在qq里回复gpt的回答
+
 ## 特性
 - qq登录失败时会尝试更换登陆方式进行重新登录，能一定程度上减少qq风控的影响
 - 回复为引用回复，且默认情况下，在群聊需@才会回复
