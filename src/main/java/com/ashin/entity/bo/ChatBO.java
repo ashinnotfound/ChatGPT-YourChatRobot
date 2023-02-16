@@ -1,4 +1,4 @@
-package com.ashin.bo;
+package com.ashin.entity.bo;
 
 import lombok.Data;
 

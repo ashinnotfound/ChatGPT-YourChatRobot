@@ -1,7 +1,8 @@
-package com.ashin.service;
+package com.ashin.service.impl;
 
-import com.ashin.bo.ChatBO;
+import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
+import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionRequest;
@@ -17,7 +18,7 @@ import retrofit2.HttpException;
  */
 @Service
 @Slf4j
-public class InteractServiceImpl implements InteractService{
+public class InteractServiceImpl implements InteractService {
     @Override
     public String chat(ChatBO chatBO) throws ChatException {
 

@@ -1,6 +1,6 @@
 package com.ashin.service;
 
-import com.ashin.bo.ChatBO;
+import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 
 /**
