@@ -4,7 +4,6 @@ import com.ashin.config.AccountConfig;
 import com.ashin.exception.ChatException;
 import com.theokanning.openai.OpenAiService;
 import com.theokanning.openai.completion.CompletionRequest;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -17,7 +16,6 @@ import java.util.*;
  * @date 2023/2/1
  */
 @Component
-@Slf4j
 public class BotUtil {
     @Resource
     public void setAccountConfig(AccountConfig accountConfig){
@@ -87,9 +85,5 @@ public class BotUtil {
 
     public static void resetPrompt(String sessionId){
         PROMPT_MAP.remove(sessionId);
-    }
-
-    public static Map<OpenAiService, Integer> getCountForOpenAiService(){
-        return COUNT_FOR_OPEN_AI_SERVICE;
     }
 }

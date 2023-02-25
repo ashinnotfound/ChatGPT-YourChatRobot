@@ -1,4 +1,4 @@
-package com.ashin.controller;
+package com.ashin.handler;
 
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
