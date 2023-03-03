@@ -1,5 +1,7 @@
 # ChatGPT-QQRobot
 
+> ## 🥰🥰🥰正在接入openai刚开放的chatgpt的api（模型gpt-3.5-turbo） -2023.3.3
+
 ## 我觉得我应该让你们知晓
 openai似乎删除或者隐藏了原先的chatgpt模型（自从Feb 8, 2023），因此本项目现在调用的并**不是**chatgpt，而是openai的一个GPT-3模型：text-davinci-003（chatgpt也是openai的一个GPT-3模型）。具体可前往下文的 *版本-v2.5* 查看。
 
