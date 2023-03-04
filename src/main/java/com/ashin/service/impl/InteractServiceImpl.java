@@ -56,6 +56,6 @@ public class InteractServiceImpl implements InteractService {
         prompt.add(answer);
         BotUtil.updatePrompt(chatBO.getSessionId(), prompt);
 
-        return answer.getContent();
+        return answer.getContent().trim();
     }
 }
