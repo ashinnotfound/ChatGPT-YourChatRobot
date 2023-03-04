@@ -4,11 +4,14 @@ import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
-import com.theokanning.openai.OpenAiService;
-import com.theokanning.openai.completion.CompletionRequest;
+import com.theokanning.openai.completion.chat.ChatCompletionRequest;
+import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.service.OpenAiService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import retrofit2.HttpException;
+
+import java.util.List;
 
 /**
  * 交互服务impl
@@ -22,16 +25,16 @@ public class InteractServiceImpl implements InteractService {
     @Override
     public String chat(ChatBO chatBO) throws ChatException {
 
-        String prompt = BotUtil.getPrompt(chatBO.getSessionId(), chatBO.getPrompt());
+        List<ChatMessage> prompt = BotUtil.getPrompt(chatBO.getSessionId(), chatBO.getPrompt());
 
         //向gpt提问
         OpenAiService openAiService = BotUtil.getOpenAiService();
-        CompletionRequest.CompletionRequestBuilder completionRequestBuilder = BotUtil.getCompletionRequestBuilder();
+        ChatCompletionRequest.ChatCompletionRequestBuilder completionRequestBuilder = BotUtil.getCompletionRequestBuilder();
 
-        CompletionRequest completionRequest = completionRequestBuilder.prompt(prompt).build();
-        String answer = null;
+        ChatCompletionRequest completionRequest = completionRequestBuilder.messages(prompt).build();
+        ChatMessage answer = null;
         try {
-            answer = openAiService.createCompletion(completionRequest).getChoices().get(0).getText();
+            answer = openAiService.createChatCompletion(completionRequest).getChoices().get(0).getMessage();
         }catch (HttpException e){
             log.error("向gpt提问失败，提问内容：{}，原因：{}", chatBO.getPrompt(), e.getMessage(), e);
             if (500 == e.code() || 503 == e.code() || 429 == e.code()){
@@ -50,14 +53,9 @@ public class InteractServiceImpl implements InteractService {
             throw new ChatException("GPT可能暂时不想理你");
         }
 
-        //去除gpt假设的用户提问
-        int userIndex = answer.indexOf("User:");
-        if (-1 != userIndex){
-            answer = answer.substring(0, userIndex - 1) + "<|im_end|>";
-        }
+        prompt.add(answer);
+        BotUtil.updatePrompt(chatBO.getSessionId(), prompt);
 
-        BotUtil.updatePrompt(chatBO.getSessionId(), chatBO.getPrompt(), answer);
-        answer = answer.replace("<|im_end|>", "").trim();
-        return answer;
+        return answer.getContent();
     }
 }

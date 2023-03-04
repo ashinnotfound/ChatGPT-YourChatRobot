@@ -1,9 +1,19 @@
-account:
-  #qq
-  qq: 123456
-  password: xxxx
+proxy:
+#  代理配置
+#  国内墙了gpt的api，所以得用代理,例子：
+#  host: 127.0.0.1
+#  port: 7890
+  host:
+  port:
 
-  #ChatGPT
+qq:
+#  qq账号密码
+  account: 123456
+  password: 123aaa
+
+chatgpt:
+#  openai的apikey
+#  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
-   - sk-xxxx
-   - sk-xxxx
+   - sk-xxxxxxx
+   - sk-xxxxxxx
