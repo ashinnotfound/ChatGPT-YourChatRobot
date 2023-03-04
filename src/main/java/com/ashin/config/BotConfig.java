@@ -86,10 +86,14 @@ public class BotConfig {
     @PostConstruct
     public void init() {
         //配置代理
-        System.setProperty("http.proxyHost", proxyConfig.getHost());
-        System.setProperty("http.proxyPort", proxyConfig.getPort());
-        System.setProperty("https.proxyHost", proxyConfig.getHost());
-        System.setProperty("https.proxyPort", proxyConfig.getPort());
+        if (null != proxyConfig.getHost() && !"".equals(proxyConfig.getHost())){
+            System.setProperty("http.proxyHost", proxyConfig.getHost());
+            System.setProperty("https.proxyHost", proxyConfig.getHost());
+        }
+        if (null != proxyConfig.getPort() && !"".equals(proxyConfig.getPort())){
+            System.setProperty("http.proxyPort", proxyConfig.getPort());
+            System.setProperty("https.proxyPort", proxyConfig.getPort());
+        }
 
         //ChatGPT
         model = "gpt-3.5-turbo";
