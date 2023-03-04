@@ -1,9 +1,7 @@
 # ChatGPT-QQRobot
 
-> ## 🥰🥰🥰正在接入openai刚开放的chatgpt的api（模型gpt-3.5-turbo） -2023.3.3
-
-## 我觉得我应该让你们知晓
-openai似乎删除或者隐藏了原先的chatgpt模型（自从Feb 8, 2023），因此本项目现在调用的并**不是**chatgpt，而是openai的一个GPT-3模型：text-davinci-003（chatgpt也是openai的一个GPT-3模型）。具体可前往下文的 *版本-v2.5* 查看。
+> ## 好消息：🥰🥰🥰已接入openai刚开放的chatgpt的api（模型gpt-3.5-turbo） -2023.3.4
+> ## 坏消息：😢😢😢国内被墙了，需要使用代理才可以使用openai的api
 
 ## 简介
 
@@ -42,16 +40,25 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 ```
 //这是application.yml文件
-#ChatGPT
-#有多少apiKey就写多少，不要留空白
-apiKey:
-  - sk-xxxx
-  - sk-xxxx
-  - sk-xxxx
+proxy:
+#  代理配置
+#  国内墙了gpt的api，所以得用代理,例子：
+#  host: 127.0.0.1
+#  port: 7890
+  host:
+  port:
 
-#qq
-qq : 123456
-password : xxxx
+qq:
+#  qq账号密码
+  account: 123456
+  password: 123aaa
+
+chatgpt:
+#  openai的apikey
+#  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
+  apiKey:
+   - sk-xxxxxxx
+   - sk-xxxxxxx
 ```
 
 3.  然后 run！！！😁😁😁
@@ -77,9 +84,10 @@ tips：机器人响应速度与你的网络环境挂钩。
 
 ## 版本
 
-### v?.? (FUTURE)
+### v3.0 (Mar 4, 2023)
 
-- 期待chatgpt官方api的发布
+- 基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
+- 成功接入openai刚开放的chatgpt的api，但是国内被墙了（包括之前的gpt3.0模型），需要代理才可以正常使用
 
 ### v2.5 (Feb 13, 2023)
 - 基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
