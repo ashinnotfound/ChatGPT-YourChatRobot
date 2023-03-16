@@ -10,6 +10,7 @@ import net.mamoe.mirai.BotFactory;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+import xyz.cssxsh.mirai.tool.FixProtocolVersion;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
@@ -26,10 +27,11 @@ import java.util.List;
 @Data
 @Component
 @ConfigurationProperties("qq")
-class QqConfig{
+class QqConfig {
     private Long account;
     private String password;
 }
+
 /**
  * chatgpt配置
  *
@@ -39,9 +41,10 @@ class QqConfig{
 @Data
 @Component
 @ConfigurationProperties("chatgpt")
-class ChatgptConfig{
+class ChatgptConfig {
     private List<String> apiKey;
 }
+
 /**
  * 代理配置
  *
@@ -51,7 +54,7 @@ class ChatgptConfig{
 @Data
 @Component
 @ConfigurationProperties("proxy")
-class ProxyConfig{
+class ProxyConfig {
     private String host;
     private String port;
 }
@@ -86,11 +89,11 @@ public class BotConfig {
     @PostConstruct
     public void init() {
         //配置代理
-        if (null != proxyConfig.getHost() && !"".equals(proxyConfig.getHost())){
+        if (null != proxyConfig.getHost() && !"".equals(proxyConfig.getHost())) {
             System.setProperty("http.proxyHost", proxyConfig.getHost());
             System.setProperty("https.proxyHost", proxyConfig.getHost());
         }
-        if (null != proxyConfig.getPort() && !"".equals(proxyConfig.getPort())){
+        if (null != proxyConfig.getPort() && !"".equals(proxyConfig.getPort())) {
             System.setProperty("http.proxyPort", proxyConfig.getPort());
             System.setProperty("https.proxyPort", proxyConfig.getPort());
         }
@@ -103,9 +106,9 @@ public class BotConfig {
 //        你可以通过设定basicPrompt来指定人格
 //        basicPrompt = new ChatMessage("system", "You are a helpful assistant");
         openAiServiceList = new ArrayList<>();
-        for (String apiKey : chatgptConfig.getApiKey()){
+        for (String apiKey : chatgptConfig.getApiKey()) {
             apiKey = apiKey.trim();
-            if (!"".equals(apiKey)){
+            if (!"".equals(apiKey)) {
                 openAiServiceList.add(new OpenAiService(apiKey, Duration.ofSeconds(1000)));
                 log.info("apiKey为 {} 的账号初始化成功", apiKey);
             }
@@ -115,24 +118,41 @@ public class BotConfig {
         Long qq = qqConfig.getAccount();
         String password = qqConfig.getPassword();
         //登录
-        BotConfiguration.MiraiProtocol[] protocolArray = BotConfiguration.MiraiProtocol.values();
-        int loginCounts = 1;
-        for (BotConfiguration.MiraiProtocol protocol : protocolArray){
-            try {
-                log.warn("正在尝试第 {} 次， 使用 {} 的方式进行登录", loginCounts++, protocol);
-                qqBot = BotFactory.INSTANCE.newBot(qq, password.trim(), new BotConfiguration(){{setProtocol(protocol);}});
-                qqBot.login();
-                log.info("成功登录账号为 {} 的qq, 登陆方式为 {}",qq, protocol);
-                //订阅监听事件
-                qqBot.getEventChannel().registerListenerHost(this.messageEventHandler);
-                break;
-            }catch (Exception e){
-                log.error("登陆失败，qq账号为 {}, 登陆方式为 {} ，原因：{}", qq, protocol, e.getMessage());
-                if (loginCounts > protocolArray.length){
-                    log.error("经过多种登录方式仍然登陆失败，可能是密码错误或者受风控影响，请尝试修改密码、绑定手机号等方式提高qq安全系数或者待会再试试");
-                    System.exit(-1);
-                }
-            }
+//        BotConfiguration.MiraiProtocol[] protocolArray = BotConfiguration.MiraiProtocol.values();
+//        int loginCounts = 1;
+//        for (BotConfiguration.MiraiProtocol protocol : protocolArray){
+//            try {
+//                log.warn("正在尝试第 {} 次， 使用 {} 的方式进行登录", loginCounts++, protocol);
+//                qqBot = BotFactory.INSTANCE.newBot(qq, password.trim(), new BotConfiguration(){{setProtocol(protocol);}});
+//                qqBot.login();
+//                log.info("成功登录账号为 {} 的qq, 登陆方式为 {}",qq, protocol);
+//                //订阅监听事件
+//                qqBot.getEventChannel().registerListenerHost(this.messageEventHandler);
+//                break;
+//            }catch (Exception e){
+//                log.error("登陆失败，qq账号为 {}, 登陆方式为 {} ，原因：{}", qq, protocol, e.getMessage());
+//                if (loginCounts > protocolArray.length){
+//                    log.error("经过多种登录方式仍然登陆失败，可能是密码错误或者受风控影响，请尝试修改密码、绑定手机号等方式提高qq安全系数或者待会再试试");
+//                    System.exit(-1);
+//                }
+//            }
+//        }
+        //登陆协议有ANDROID_PHONE, ANDROID_PAD, ANDROID_WATCH, IPAD, MACOS 其中MACOS较为稳定
+        BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.MACOS;
+        try {
+            qqBot = BotFactory.INSTANCE.newBot(qq, password.trim(), new BotConfiguration() {{
+                setProtocol(protocol);
+            }});
+
+            //使用临时修复插件
+            FixProtocolVersion.update();
+
+            qqBot.login();
+            log.info("成功登录账号为 {} 的qq, 登陆方式为 {}", qq, protocol);
+            //订阅监听事件
+            qqBot.getEventChannel().registerListenerHost(this.messageEventHandler);
+        } catch (Exception e) {
+            log.error("登陆失败，qq账号为 {}, 登陆方式为 {} ，原因：{}", qq, protocol, e.getMessage());
         }
     }
 }
