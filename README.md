@@ -5,6 +5,8 @@
 
 ## 简介
 
+> 如果觉得不错，请点点右上角的星星，这能让我快乐一整天🥰🥰🥰
+
 an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
 这是一个**非官方**的基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)实现的**qq机器人版**ChatGPT，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。可用于拓展、自定义。
