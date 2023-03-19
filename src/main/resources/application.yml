@@ -25,4 +25,4 @@ wechat:
   #  是否使用微信 ture/false
   enable: true
   #  生成的登录二维码路径 默认与项目同级
-  qrPath: "../"
+  qrPath: "./"
