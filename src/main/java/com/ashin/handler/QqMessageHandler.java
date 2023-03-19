@@ -17,13 +17,13 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 
 /**
- * 事件处理
+ * QQ消息处理程序
  *
  * @author ashinnotfound
  * @date 2023/2/1
  */
 @Component
-public class MessageEventHandler implements ListenerHost {
+public class QqMessageHandler implements ListenerHost {
     @Resource
     private InteractService interactService;
 
