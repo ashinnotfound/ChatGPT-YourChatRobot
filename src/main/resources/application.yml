@@ -1,20 +1,26 @@
 proxy:
-#  代理配置
-#  国内墙了gpt的api，所以得用代理,例子：
-#  若不需要留空即可
-  #  host: 127.0.0.1
-  #  port: 7890
-  host:
-  port:
-
-qq:
-#  qq账号密码
-  account: 123456
-  password: 123aaa
+  #  代理配置
+  #  国内墙了gpt的api，所以得用代理,例子：
+  #  若不需要留空即可
+  host: 127.0.0.1
+  port: 7890
 
 chatgpt:
-#  openai的apikey
-#  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
+  #  openai的apikey
+  #  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
-   - sk-xxxxxxx
-   - sk-xxxxxxx
+    - sk-xxxxx
+    - sk-xxxxx
+
+qq:
+  #  是否使用qq ture/false
+  enable: true
+  #  qq账号密码
+  account: 123456
+  password: xxxx
+
+wechat:
+  #  是否使用微信 ture/false
+  enable: true
+  #  生成的登录二维码路径 默认与项目同级
+  qrPath: "../"
