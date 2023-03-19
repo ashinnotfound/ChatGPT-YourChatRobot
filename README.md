@@ -31,6 +31,8 @@ qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/
 
 ❤❤❤ 开箱即用!!! ❤❤❤
 
+> 除了下面的方法，你也可以下载release的zip包直接使用
+
 你只需要
 
 1.  clone本项目
