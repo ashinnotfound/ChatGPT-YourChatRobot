@@ -46,11 +46,13 @@ qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/
 ```
 //这是application.yml文件
 proxy:
-  #  代理配置
-  #  国内墙了gpt的api，所以得用代理,例子：
+    #  代理配置
+  #  国内墙了gpt的api，所以得用代理，一般你使用的代理软件会有相关信息，例子：
+  #  host: 127.0.0.1
+  #  port: 7890
   #  若不需要留空即可
-  host: 127.0.0.1
-  port: 7890
+  host: 
+  port: 
 
 chatgpt:
   #  openai的apikey
