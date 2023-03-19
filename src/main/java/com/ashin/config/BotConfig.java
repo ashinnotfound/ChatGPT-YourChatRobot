@@ -79,12 +79,6 @@ public class BotConfig {
             }
         }
 
-        //微信
-        if (wechatConfig.getEnable()){
-            Wechat wechatBot = new Wechat(wechatMessageHandler, wechatConfig.getQrPath());
-            wechatBot.start();
-        }
-
         //qq
         if (qqConfig.getEnable()){
             Long qq = qqConfig.getAccount();
@@ -92,6 +86,7 @@ public class BotConfig {
             //登录 登陆协议有ANDROID_PHONE, ANDROID_PAD, ANDROID_WATCH, IPAD, MACOS 其中MACOS较为稳定
             BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.MACOS;
             try {
+                log.info("正在登录qq,请按提示操作：");
                 qqBot = BotFactory.INSTANCE.newBot(qq, password.trim(), new BotConfiguration() {{
                     setProtocol(protocol);
                 }});
@@ -105,6 +100,13 @@ public class BotConfig {
                 qqBot.getEventChannel().registerListenerHost(qqMessageHandler);
             } catch (Exception e) {
                 log.error("登陆失败，qq账号为 {}, 登陆方式为 {} ，原因：{}", qq, protocol, e.getMessage());
+            }
+
+            //微信
+            if (wechatConfig.getEnable()){
+                log.info("正在登录微信,请按提示操作：");
+                Wechat wechatBot = new Wechat(wechatMessageHandler, wechatConfig.getQrPath());
+                wechatBot.start();
             }
         }
     }

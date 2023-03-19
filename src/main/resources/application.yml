@@ -1,23 +1,24 @@
 proxy:
   #  代理配置
   #  国内墙了gpt的api，所以得用代理,例子：
+  #  host: 127.0.0.1
+  #  port: 7890
   #  若不需要留空即可
-  host: 127.0.0.1
-  port: 7890
+  host:
+  port:
 
 chatgpt:
   #  openai的apikey
   #  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
-    - sk-xxxxx
-    - sk-xxxxx
+    - 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
 
 qq:
   #  是否使用qq ture/false
   enable: true
   #  qq账号密码
-  account: 123456
-  password: xxxx
+  account: 3169413744
+  password: Chatgpt666
 
 wechat:
   #  是否使用微信 ture/false
