@@ -101,13 +101,13 @@ public class BotConfig {
             } catch (Exception e) {
                 log.error("登陆失败，qq账号为 {}, 登陆方式为 {} ，原因：{}", qq, protocol, e.getMessage());
             }
+        }
 
-            //微信
-            if (wechatConfig.getEnable()){
-                log.info("正在登录微信,请按提示操作：");
-                Wechat wechatBot = new Wechat(wechatMessageHandler, wechatConfig.getQrPath());
-                wechatBot.start();
-            }
+        //微信
+        if (wechatConfig.getEnable()){
+            log.info("正在登录微信,请按提示操作：");
+            Wechat wechatBot = new Wechat(wechatMessageHandler, wechatConfig.getQrPath());
+            wechatBot.start();
         }
     }
 }
