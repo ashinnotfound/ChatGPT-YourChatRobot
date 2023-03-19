@@ -1,5 +1,6 @@
-# ChatGPT-QQRobot
+# ChatGPT-YourChatRobot
 
+> ## 更好的消息😋😋😋：支持微信机器人了,快来把你的微信也变成chatgpt吧 - 2023.3.19
 > ## 好消息：🥰🥰🥰已接入openai刚开放的chatgpt的api（模型gpt-3.5-turbo） -2023.3.4
 > ## 坏消息：😢😢😢国内被墙了，需要使用代理才可以使用openai的api
 
@@ -7,19 +8,21 @@
 
 > 如果觉得不错，请点点右上角的星星，这能让我快乐一整天🥰🥰🥰
 
-an **unofficial** implement of ChatGPT in **Tencent QQ**.
+an **unofficial** implement of ChatGPT in **QQ**/**Wechat**.
 
-这是一个**非官方**的基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)实现的**qq机器人版**ChatGPT，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。可用于拓展、自定义。
+这是一个**开箱即用**的**非官方**的聊天机器人，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。可用于拓展、自定义。
+qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)；
+微信机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos).
 
-🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git) 🌹🌹🌹
+🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)、[mamoe/mirai](https://github.com/mamoe/mirai.git)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos) 🌹🌹🌹
 
 ## 原理
 
-使用mirai登录qq并监听消息->调用openai接口将消息向gpt提问->使用mirai在qq里回复gpt的回答
+使用mirai/itchat登录qq/微信并监听消息->调用openai接口将消息向gpt提问->使用mirai/itchat在qq/微信里回复gpt的回答
 
 ## 特性
-- qq登录失败时会尝试更换登陆方式进行重新登录，能一定程度上减少qq风控的影响
-- 回复为引用回复，且默认情况下，在群聊需@才会回复
+- qq登录使用[mirai临时修复组件](https://github.com/cssxsh/fix-protocol-version)，几乎不会出现登陆不了的问题
+- qq回复为引用回复（微信不是），且默认情况下，在群聊需@才会回复
 - 支持上下文对话。向机器人发送 “重置会话” 可以清除会话历史
 - 支持使用多个apiKey。在此情况下，会优先调用使用次数最少的apiKey，达到避免同一个api请求过多造成的Http500/503问题的目的
 - （***开发中🥳***）网页控制台功能，更方便地控制你的GPT
@@ -36,36 +39,43 @@ an **unofficial** implement of ChatGPT in **Tencent QQ**.
 
     -   一个OpenAI账号
 
-    -   一个qq号
+    -   一个qq号/微信号
 
         并把它们配置在application.yml里:
 
 ```
 //这是application.yml文件
 proxy:
-#  代理配置
-#  国内墙了gpt的api，所以得用代理,例子：
-#  host: 127.0.0.1
-#  port: 7890
-  host:
-  port:
-
-qq:
-#  qq账号密码
-  account: 123456
-  password: 123aaa
+  #  代理配置
+  #  国内墙了gpt的api，所以得用代理,例子：
+  #  若不需要留空即可
+  host: 127.0.0.1
+  port: 7890
 
 chatgpt:
-#  openai的apikey
-#  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
+  #  openai的apikey
+  #  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
-   - sk-xxxxxxx
-   - sk-xxxxxxx
+    - sk-xxxxx
+    - sk-xxxxx
+
+qq:
+  #  是否使用qq ture/false
+  enable: true
+  #  qq账号密码
+  account: 123456
+  password: xxxx
+
+wechat:
+  #  是否使用微信 ture/false
+  enable: true
+  #  生成的登录二维码路径 默认与项目同级
+  qrPath: "../"
 ```
 
 3.  然后 run！！！😁😁😁
 
-此时你的qq便是ChatGPT了！！！✨✨✨
+此时你的qq/微信便是ChatGPT了！！！✨✨✨
 
 tips：机器人响应速度与你的网络环境挂钩。
 
@@ -74,7 +84,7 @@ tips：机器人响应速度与你的网络环境挂钩。
 -   获取apiKey
     https://platform.openai.com/account/api-keys
 
--   第一次使用时可能会遇到滑动验证码问题
+-   第一次使用qq登录时可能会遇到滑动验证码问题
 
     根据终端所给提示进行操作即可，主要步骤为：
 
@@ -85,6 +95,12 @@ tips：机器人响应速度与你的网络环境挂钩。
     5.  在终端中输入ticket的值(注意去掉引号"")
 
 ## 版本
+
+### v3.5 (Mar 19, 2023)
+- 今天在github冲浪的时候发现，2023了竟然还有能用的java微信sdk！！！
+- 现在你也可以将微信也变成chatgpt了🥰🥰🥰
+- qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
+- 微信机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos)
 
 ### v3.0 (Mar 4, 2023)
 
