@@ -1,7 +1,7 @@
 # ChatGPT-YourChatRobot
 
 > ## 更好的消息😋😋😋：支持微信机器人了,快来把你的微信也变成chatgpt吧 - 2023.3.19
-> ## 好消息：🥰🥰🥰已接入openai刚开放的chatgpt的api（模型gpt-3.5-turbo） -2023.3.4
+> ## 好消息：🥰🥰🥰已接入openai刚开放的chatgpt的api（指模型gpt-3.5-turbo），理论上也支持gpt4，但我还在waitlist中，无法测试😢 -2023.3.4
 > ## 坏消息：😢😢😢国内被墙了，需要使用代理才可以使用openai的api
 
 ## 简介
