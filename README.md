@@ -21,13 +21,6 @@ qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/
 
 使用mirai/itchat登录qq/微信并监听消息->调用openai接口将消息向gpt提问->使用mirai/itchat在qq/微信里回复gpt的回答
 
-## 特性
-- qq登录使用[mirai临时修复组件](https://github.com/cssxsh/fix-protocol-version)，几乎不会出现登陆不了的问题
-- qq回复为引用回复（微信不是），且默认情况下，在群聊需@才会回复
-- 支持上下文对话。向机器人发送 “重置会话” 可以清除会话历史
-- 支持使用多个apiKey。在此情况下，会优先调用使用次数最少的apiKey，达到避免同一个api请求过多造成的Http500/503问题的目的
-- （***开发中🥳***）网页控制台功能，更方便地控制你的GPT
-
 ## 使用
 
 ❤❤❤ 开箱即用!!! ❤❤❤
@@ -75,7 +68,7 @@ wechat:
   #  是否使用微信 ture/false
   enable: true
   #  生成的登录二维码路径 默认与项目同级
-  qrPath: "../"
+  qrPath: "./"
 ```
 
 3.  然后 run！！！😁😁😁
@@ -98,6 +91,13 @@ tips：机器人响应速度与你的网络环境挂钩。
     3.  滑动验证码
     4.  验证完成后,在 `Network` 中找到名为 `cap_union_new_verify` 的请求, 复制 ticket 的值
     5.  在终端中输入ticket的值(注意去掉引号"")
+
+## 特性
+- qq登录使用[mirai临时修复组件](https://github.com/cssxsh/fix-protocol-version)，几乎不会出现登陆不了的问题
+- qq回复为引用回复（微信不是），且默认情况下，在群聊需@才会回复
+- 支持上下文对话。向机器人发送 “重置会话” 可以清除会话历史
+- 支持使用多个apiKey。在此情况下，会优先调用使用次数最少的apiKey，达到避免同一个api请求过多造成的Http500/503问题的目的
+- （***开发中🥳***）网页控制台功能，更方便地控制你的GPT
 
 ## 版本
 
