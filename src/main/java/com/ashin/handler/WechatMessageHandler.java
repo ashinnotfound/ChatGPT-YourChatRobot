@@ -33,7 +33,7 @@ public class WechatMessageHandler implements IMsgHandlerFace {
             //存在@机器人的消息就向ChatGPT提问
             if (baseMsg.getText().contains("@"+ Core.getInstance().getNickName())){
                 //去除@再提问
-                String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName(), "").trim();
+                String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName() + " ", "").trim();
                 if (RESET_WORD.equals(prompt)){
                     BotUtil.resetPrompt(baseMsg.getFromUserName());
                     return "重置会话成功";
