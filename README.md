@@ -13,6 +13,7 @@ an **unofficial** implement of ChatGPT in **QQ**/**Wechat**.
 这是一个**开箱即用**的**非官方**的聊天机器人，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。可用于拓展、自定义。
 
 qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)；
+
 微信机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos).
 
 🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)、[mamoe/mirai](https://github.com/mamoe/mirai.git)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos) 🌹🌹🌹
