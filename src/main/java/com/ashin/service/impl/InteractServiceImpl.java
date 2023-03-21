@@ -38,7 +38,7 @@ public class InteractServiceImpl implements InteractService {
         }catch (HttpException e){
             log.error("向gpt提问失败，提问内容：{}，原因：{}", chatBO.getPrompt(), e.getMessage(), e);
             if (500 == e.code() || 503 == e.code() || 429 == e.code()){
-                log.info("尝试重新发送");
+                log.warn("尝试重新提问");
                 try {
                     //可能是同时请求过多，尝试重新发送
                     Thread.sleep(3000);
@@ -46,6 +46,11 @@ public class InteractServiceImpl implements InteractService {
                     log.error("进程休眠失败，原因：{}", ex.getMessage(), ex);
                     throw new RuntimeException(ex);
                 }
+                return chat(chatBO);
+            }else if(400 == e.code()){
+                log.warn("尝试重新提问");
+                //http400错误，大概率是历史会话太多导致token超出限制
+                BotUtil.deleteFirstPrompt(chatBO.getSessionId());
                 return chat(chatBO);
             }
         }

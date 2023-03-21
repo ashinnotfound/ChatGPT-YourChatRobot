@@ -69,7 +69,7 @@ public class BotConfig {
         maxToken = 2048;
         temperature = 0.8;
 //        你可以通过设定basicPrompt来指定人格
-//        basicPrompt = new ChatMessage("system", "You are a helpful assistant");
+//        basicPrompt = new ChatMessage("system", "接下来在我向你陈述一件事情时，你只需要回答：“典”");
         openAiServiceList = new ArrayList<>();
         for (String apiKey : chatgptConfig.getApiKey()) {
             apiKey = apiKey.trim();

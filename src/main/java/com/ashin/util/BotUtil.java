@@ -72,6 +72,25 @@ public class BotUtil {
         PROMPT_MAP.put(sessionId, promptList);
     }
 
+    public static void deleteFirstPrompt(String sessionId) {
+        if (PROMPT_MAP.containsKey(sessionId)){
+            List<ChatMessage> promptList = PROMPT_MAP.get(sessionId);
+            //有basicPrompt删除第二个
+            if (null != botConfig.getBasicPrompt()){
+                if (promptList.size() > 1){
+                    promptList.remove(1);
+                    updatePrompt(sessionId, promptList);
+                }
+            }else {
+                //没有basicPrompt删除第一个
+                if (promptList.size() > 0){
+                    promptList.remove(0);
+                    updatePrompt(sessionId, promptList);
+                }
+            }
+        }
+    }
+
     public static void resetPrompt(String sessionId) {
         PROMPT_MAP.remove(sessionId);
     }
