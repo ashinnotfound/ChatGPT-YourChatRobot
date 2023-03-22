@@ -55,7 +55,7 @@ public class BotUtil {
         return completionRequestBuilder;
     }
 
-    public static List<ChatMessage> getPrompt(String sessionId, String newPrompt) {
+    public static List<ChatMessage> buildPrompt(String sessionId, String newPrompt) {
         if (!PROMPT_MAP.containsKey(sessionId)) {
             if (null != botConfig.getBasicPrompt()){
                 List<ChatMessage> promptList = new ArrayList<>();
@@ -72,23 +72,30 @@ public class BotUtil {
         PROMPT_MAP.put(sessionId, promptList);
     }
 
-    public static void deleteFirstPrompt(String sessionId) {
-        if (PROMPT_MAP.containsKey(sessionId)){
-            List<ChatMessage> promptList = PROMPT_MAP.get(sessionId);
-            //有basicPrompt删除第二个
-            if (null != botConfig.getBasicPrompt()){
-                if (promptList.size() > 1){
-                    promptList.remove(1);
-                    updatePrompt(sessionId, promptList);
-                }
-            }else {
-                //没有basicPrompt删除第一个
-                if (promptList.size() > 0){
-                    promptList.remove(0);
-                    updatePrompt(sessionId, promptList);
-                }
-            }
+    public static boolean isPromptEmpty(String sessionId){
+        if (!PROMPT_MAP.containsKey(sessionId)){
+            return true;
         }
+        List<ChatMessage> promptList = PROMPT_MAP.get(sessionId);
+        if (null != botConfig.getBasicPrompt()){
+            return promptList.size() == 1;
+        }else {
+            return promptList.size() == 0;
+        }
+    }
+
+    public static boolean deleteFirstPrompt(String sessionId) {
+        if (!isPromptEmpty(sessionId)){
+            int index = null != botConfig.getBasicPrompt() ? 1 : 0;
+            List<ChatMessage> promptList = PROMPT_MAP.get(sessionId);
+            //问
+            promptList.remove(index);
+            //答
+            promptList.remove(index);
+            updatePrompt(sessionId, promptList);
+            return true;
+        }
+        return false;
     }
 
     public static void resetPrompt(String sessionId) {
