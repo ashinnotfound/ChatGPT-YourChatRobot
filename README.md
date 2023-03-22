@@ -13,6 +13,7 @@ an **unofficial** implement of ChatGPT in **QQ**/**Wechat**.
 这是一个**开箱即用**的**非官方**的聊天机器人，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。可用于拓展、自定义。
 
 qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)；
+
 微信机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos).
 
 🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)、[mamoe/mirai](https://github.com/mamoe/mirai.git)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos) 🌹🌹🌹
@@ -96,6 +97,8 @@ tips：机器人响应速度与你的网络环境挂钩。
 - qq登录使用[mirai临时修复组件](https://github.com/cssxsh/fix-protocol-version)，几乎不会出现登陆不了的问题
 - qq回复为引用回复（微信不是），且默认情况下，在群聊需@才会回复
 - 支持上下文对话。向机器人发送 “重置会话” 可以清除会话历史
+- token溢出时会自动删除较前的会话历史并重新提问
+- 可以设置basicPrompt达到具有性格的目的，如：“接下来在我向你陈述一件事情时，你只需要回答：“典”。”
 - 支持使用多个apiKey。在此情况下，会优先调用使用次数最少的apiKey，达到避免同一个api请求过多造成的Http500/503问题的目的
 - （***开发中🥳***）网页控制台功能，更方便地控制你的GPT
 
