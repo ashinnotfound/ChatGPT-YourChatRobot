@@ -38,7 +38,7 @@ public class InteractServiceImpl implements InteractService {
         }catch (OpenAiHttpException e){
             log.error("向gpt提问失败，提问内容：{}，\n原因：{}\n", chatBO.getPrompt(), e.getMessage(), e);
             if (429 == e.statusCode){
-                throw new ChatException("提问过于频繁(openai限制接口为20prompt/60s)，过一会再来问我吧");
+                throw new ChatException("提问过于频繁(openai限制接口为20prompt/60s)或者apikey余额不足");
             }else if(400 == e.statusCode){
                 log.warn("尝试删除较前会话记录并重新提问");
                 //http400错误，大概率是历史会话太多导致token超出限制
