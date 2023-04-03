@@ -20,6 +20,10 @@ qq:
   #  qq账号密码
   account: 123456
   password: xxxx
+  #  是否自动同意好友申请
+  acceptNewFriend: false
+  #  是否自动同意被邀请入群
+  acceptNewGroup: false
 
 wechat:
   #  是否使用微信 ture/false

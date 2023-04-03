@@ -17,4 +17,6 @@ public class QqConfig {
     private Boolean enable;
     private Long account;
     private String password;
+    private Boolean acceptNewFriend;
+    private Boolean acceptNewGroup;
 }

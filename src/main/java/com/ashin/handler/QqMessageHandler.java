@@ -1,5 +1,6 @@
 package com.ashin.handler;
 
+import com.ashin.config.QqConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
@@ -7,7 +8,9 @@ import com.ashin.util.BotUtil;
 import net.mamoe.mirai.contact.MessageTooLargeException;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
+import net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent;
 import net.mamoe.mirai.event.events.MessageEvent;
+import net.mamoe.mirai.event.events.NewFriendRequestEvent;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -26,6 +29,8 @@ import javax.annotation.Resource;
 public class QqMessageHandler implements ListenerHost {
     @Resource
     private InteractService interactService;
+    @Resource
+    private QqConfig qqConfig;
 
     private static final String RESET_WORD = "重置会话";
 
@@ -53,7 +58,6 @@ public class QqMessageHandler implements ListenerHost {
             response(event, chatBO, prompt);
         }
     }
-
     private void response(@NotNull MessageEvent event, ChatBO chatBO, String prompt) {
         if (RESET_WORD.equals(prompt)) {
             //检测到重置会话指令
@@ -77,6 +81,19 @@ public class QqMessageHandler implements ListenerHost {
                 //信息太大，无法引用，采用直接回复
                 event.getSubject().sendMessage(response);
             }
+        }
+    }
+
+    @EventHandler
+    public void onNewFriendRequestEvent(NewFriendRequestEvent event){
+        if (qqConfig.getAcceptNewFriend()){
+            event.accept();
+        }
+    }
+    @EventHandler
+    public void onNewGroupRequestEvent(BotInvitedJoinGroupRequestEvent event){
+        if (qqConfig.getAcceptNewGroup()){
+            event.accept();
         }
     }
 }
