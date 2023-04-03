@@ -8,9 +8,7 @@ import com.ashin.util.BotUtil;
 import net.mamoe.mirai.contact.MessageTooLargeException;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
-import net.mamoe.mirai.event.events.BotInvitedJoinGroupRequestEvent;
-import net.mamoe.mirai.event.events.MessageEvent;
-import net.mamoe.mirai.event.events.NewFriendRequestEvent;
+import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.At;
 import net.mamoe.mirai.message.data.MessageChain;
 import net.mamoe.mirai.message.data.MessageChainBuilder;
@@ -35,26 +33,31 @@ public class QqMessageHandler implements ListenerHost {
     private static final String RESET_WORD = "重置会话";
 
     /**
-     * 监听消息并把ChatGPT的回答发送到对应qq/群
-     * 注：如果是在群聊则需@
+     * 好友消息事件
      *
-     * @param event 事件 ps:此处是MessageEvent 故所有的消息事件都会被监听
+     * @param event 事件
      */
     @EventHandler
-    public void onMessage(@NotNull MessageEvent event){
+    public void onFriendMessageEvent(FriendMessageEvent event){
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
-        if (event.getBot().getGroups().contains(event.getSubject().getId())) {
-            //如果是在群聊
-            if (event.getMessage().contains(new At(event.getBot().getId()))) {
-                //存在@机器人的消息就向ChatGPT提问
-                //去除@再提问
-                String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
-                response(event, chatBO, prompt);
-            }
-        } else {
-            //不是在群聊 则直接回复
-            String prompt = event.getMessage().contentToString().trim();
+        String prompt = event.getMessage().contentToString().trim();
+        response(event, chatBO, prompt);
+    }
+
+    /**
+     * 群聊消息事件
+     *
+     * @param event 事件
+     */
+    @EventHandler
+    public void onGroupMessageEvent(GroupMessageEvent event){
+        ChatBO chatBO = new ChatBO();
+        chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
+        if (event.getMessage().contains(new At(event.getBot().getId()))) {
+            //存在@机器人的消息就向ChatGPT提问
+            //去除@再提问
+            String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
             response(event, chatBO, prompt);
         }
     }
@@ -84,12 +87,23 @@ public class QqMessageHandler implements ListenerHost {
         }
     }
 
+    /**
+     * 好友申请事件
+     *
+     * @param event 事件
+     */
     @EventHandler
     public void onNewFriendRequestEvent(NewFriendRequestEvent event){
         if (qqConfig.getAcceptNewFriend()){
             event.accept();
         }
     }
+
+    /**
+     * 群聊邀请事件
+     *
+     * @param event 事件
+     */
     @EventHandler
     public void onNewGroupRequestEvent(BotInvitedJoinGroupRequestEvent event){
         if (qqConfig.getAcceptNewGroup()){
