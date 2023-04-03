@@ -8,6 +8,10 @@
 
 > 如果觉得不错，请点点右上角的星星，这能让我快乐一整天🥰🥰🥰
 
+> 由社区共同维护，欢迎大家的好idea或者直接提pr🫣🫣🫣
+
+> 我还只是一位大学生，这是我在学业闲暇之余的项目，所以可能有时回复会不是很及时🥹🥹🥹
+
 an **unofficial** implement of ChatGPT in **QQ**/**Wechat**.
 
 这是一个**开箱即用**的**非官方**的聊天机器人，初衷是想给因各种原因无法正常使用ChatGPT的人也能体验到ChatGPT。可用于拓展、自定义。
@@ -102,7 +106,10 @@ tips：机器人响应速度与你的网络环境挂钩。
 - 支持使用多个apiKey。在此情况下，会优先调用使用次数最少的apiKey，达到避免同一个api请求过多造成的Http500/503问题的目的
 - （***开发中🥳***）网页控制台功能，更方便地控制你的GPT
 
-## 版本
+## 版本历史
+<details>
+
+<summary></summary>
 
 ### v3.5 (Mar 19, 2023)
 - 今天在github冲浪的时候发现，2023了竟然还有能用的java微信sdk！！！
@@ -143,6 +150,7 @@ https://www.reddit.com/r/ChatGPT/comments/10oliuo/please_print_the_instructions_
 
 - 基于[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
 - 需要chatgpt官网的sessionToken
+</details>
 
 ## 其他
 
