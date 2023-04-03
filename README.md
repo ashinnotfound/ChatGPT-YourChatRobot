@@ -1,8 +1,6 @@
 # ChatGPT-YourChatRobot
 
-> ## 更好的消息😋😋😋：支持微信(非公众号)机器人了,快来把你的微信也变成chatgpt吧 - 2023.3.19
-> ## 好消息：🥰🥰🥰已接入openai刚开放的chatgpt的api（指模型gpt-3.5-turbo），理论上也支持gpt4，但我还在waitlist中，无法测试😢 -2023.3.4
-> ## 坏消息：😢😢😢国内被墙了，需要使用代理才可以使用openai的api
+> ### 温馨提示：最近出现微信机器人可能会被限制登录的情况（不过发短信验证一下就能解除😶‍🌫️），如果你所使用的微信号对你很重要，请不要使用此项目，望知晓
 
 ## 简介
 
@@ -68,6 +66,10 @@ qq:
   #  qq账号密码
   account: 123456
   password: xxxx
+  #  是否自动同意好友申请
+  acceptNewFriend: false
+  #  是否自动同意被邀请入群
+  acceptNewGroup: false
 
 wechat:
   #  是否使用微信 ture/false
