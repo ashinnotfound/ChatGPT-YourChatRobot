@@ -83,8 +83,8 @@ public class BotConfig {
         if (qqConfig.getEnable()){
             Long qq = qqConfig.getAccount();
             String password = qqConfig.getPassword();
-            //登录 登陆协议有ANDROID_PHONE, ANDROID_PAD, ANDROID_WATCH, IPAD, MACOS 其中MACOS较为稳定
-            BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.MACOS;
+            //登录 登陆协议有ANDROID_PHONE, ANDROID_PAD, ANDROID_WATCH, IPAD, MACOS
+            BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.ANDROID_PAD;
             try {
                 log.info("正在登录qq,请按提示操作：");
                 qqBot = BotFactory.INSTANCE.newBot(qq, password.trim(), new BotConfiguration() {{
