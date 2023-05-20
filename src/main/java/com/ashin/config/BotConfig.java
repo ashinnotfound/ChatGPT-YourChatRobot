@@ -9,6 +9,7 @@ import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.Bot;
 import net.mamoe.mirai.BotFactory;
+import net.mamoe.mirai.auth.BotAuthorization;
 import net.mamoe.mirai.utils.BotConfiguration;
 import org.springframework.stereotype.Component;
 import xyz.cssxsh.mirai.tool.FixProtocolVersion;
@@ -84,22 +85,26 @@ public class BotConfig {
             Long qq = qqConfig.getAccount();
             String password = qqConfig.getPassword();
             //登录 登陆协议有ANDROID_PHONE, ANDROID_PAD, ANDROID_WATCH, IPAD, MACOS
-            BotConfiguration.MiraiProtocol protocol = BotConfiguration.MiraiProtocol.ANDROID_PAD;
             try {
                 log.info("正在登录qq,请按提示操作：");
-                qqBot = BotFactory.INSTANCE.newBot(qq, password.trim(), new BotConfiguration() {{
-                    setProtocol(protocol);
-                }});
-
-                //使用临时修复插件
-                FixProtocolVersion.update();
+                if (qqConfig.getMethod() == 1){
+                    //密码登录
+                    qqBot = BotFactory.INSTANCE.newBot(qq, password.trim(), new BotConfiguration() {{
+                        setProtocol(BotConfiguration.MiraiProtocol.ANDROID_PAD);
+                    }});
+                    //使用临时修复插件
+                    FixProtocolVersion.update();
+                }else {
+                    //扫码登陆
+                    qqBot = BotFactory.INSTANCE.newBot(qq, BotAuthorization.byQRCode(), configuration -> configuration.setProtocol(BotConfiguration.MiraiProtocol.ANDROID_WATCH));
+                }
 
                 qqBot.login();
-                log.info("成功登录账号为 {} 的qq, 登陆方式为 {}", qq, protocol);
+                log.info("成功登录账号为 {} 的qq, 登陆方式为 {}", qq, qqConfig.getMethod() == 1 ? "密码登录" : "扫码登陆");
                 //订阅监听事件
                 qqBot.getEventChannel().registerListenerHost(qqMessageHandler);
             } catch (Exception e) {
-                log.error("登陆失败，qq账号为 {}, 登陆方式为 {} ，原因：{}", qq, protocol, e.getMessage());
+                log.error("登陆失败，qq账号为 {}, 登陆方式为 {} ，原因：{}", qq, qqConfig.getMethod() == 1 ? "密码登录" : "扫码登陆", e.getMessage());
             }
         }
 

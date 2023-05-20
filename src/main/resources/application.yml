@@ -17,6 +17,8 @@ chatgpt:
 qq:
   #  是否使用qq ture/false
   enable: true
+  #  登陆方法：1.密码登录 2.扫码登录(推荐)
+  method: 2
   #  qq账号密码
   account: 123456
   password: xxxx

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("qq")
 public class QqConfig {
     private Boolean enable;
+    private Integer method;
     private Long account;
     private String password;
     private Boolean acceptNewFriend;
