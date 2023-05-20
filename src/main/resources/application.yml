@@ -15,7 +15,7 @@ chatgpt:
     - sk-xxxxx
 
 qq:
-  #  是否使用qq ture/false
+  #  是否使用qq true/false
   enable: true
   #  登陆方法：1.密码登录 2.扫码登录(推荐)
   method: 2
@@ -28,7 +28,7 @@ qq:
   acceptNewGroup: false
 
 wechat:
-  #  是否使用微信 ture/false
+  #  是否使用微信 true/false
   enable: true
   #  生成的登录二维码路径 默认与项目同级
   qrPath: "./"
