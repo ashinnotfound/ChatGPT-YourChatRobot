@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ashin</groupId>
     <artifactId>ChatGPT-YourChatRobot</artifactId>
-    <version>3.5</version>
+    <version>3.6</version>
     <name>myGPT</name>
     <description>快来把你的qq或微信变为chatgpt</description>
     <properties>
