@@ -46,6 +46,11 @@
             <scope>system</scope>
             <systemPath>${pom.basedir}/src/main/resources/fix-protocol-version-1.9.11.mirai2.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>org.asynchttpclient</groupId>
+            <artifactId>async-http-client</artifactId>
+            <version>2.12.3</version>
+        </dependency>
 <!--        微信          -->
         <dependency>
             <groupId>itchat</groupId>
