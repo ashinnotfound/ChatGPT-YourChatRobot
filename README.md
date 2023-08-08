@@ -1,6 +1,6 @@
 # ChatGPT-YourChatRobot
 
-> ### NEWS: qq机器人新增扫码登陆，能一定程度上减少风控的影响。btw，520快乐🤪🤪🤪
+> ### NEWS: 最近有空能闲下来看看这个项目，主要更新了项目依赖、优化了下代码结构、增加了token消耗的计算、优化了bot交互返回信息🤗🤗🤗 --- 2023.8.8
 
 ## 简介
 
@@ -45,39 +45,50 @@ qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/
 ```
 //这是application.yml文件
 proxy:
-    #  代理配置
+  #  代理配置
   #  国内墙了gpt的api，所以得用代理，一般你使用的代理软件会有相关信息，例子：
   #  host: 127.0.0.1
   #  port: 7890
   #  若不需要留空即可
-  host: 
-  port: 
+  host:
+  port:
 
-chatgpt:
+gpt:
+  # 使用的 chat 模型 如gpt-3.5-turbo/gpt-4 (https://platform.openai.com/docs/models/models)
+  model: gpt-3.5-turbo
+  # 最大token限制 越多的token意味着越多的花费(gpt-3.5-turbo上限为4096token, gpt-4则为8192)
+  maxToken: 2048
+  # 信息熵 越高回答越随机(Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.---via OPENAI)
+  temperature: 0.5
+  # 基础提问 支持多个提问 可用来设定人格(对应api中的system角色)
+  basicPrompt:
+    - "用中文回答我的问题"
   #  openai的apikey
   #  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
-    - sk-xxxxx
-    - sk-xxxxx
-
+    -
 qq:
-  #  是否使用qq ture/false
+  #  是否使用qq true/false
   enable: true
   #  登陆方法：1.密码登录 2.扫码登录(推荐)
   method: 2
-  #  qq账号密码
-  account: 123456
-  password: xxxx
+  #  qq账号密码(扫码登录则无需填写账号密码)
+  account:
+  password:
   #  是否自动同意好友申请
   acceptNewFriend: false
   #  是否自动同意被邀请入群
   acceptNewGroup: false
+  #  重置会话指令
+  resetWord: "重置会话"
 
 wechat:
-  #  是否使用微信 ture/false
-  enable: true
+  #  是否使用微信 true/false
+  enable: false
   #  生成的登录二维码路径 默认与项目同级
   qrPath: "./"
+  #  重置会话指令
+  resetWord: "重置会话"
 ```
 
 3.  然后 run！！！😁😁😁
@@ -91,7 +102,7 @@ tips：机器人响应速度与你的网络环境挂钩。
 -   获取apiKey
     https://platform.openai.com/account/api-keys
 
--   第一次使用qq登录时可能会遇到滑动验证码问题
+-   第一次使用qq账号密码登录时可能会遇到滑动验证码问题
 
     根据终端所给提示进行操作即可，主要步骤为：
 
@@ -115,6 +126,10 @@ tips：机器人响应速度与你的网络环境挂钩。
 
 <summary></summary>
     
+### v3.7 (Aug 8, 2023)
+- 最近有空能闲下来看看这个项目，主要更新了项目依赖、优化了下代码结构、增加了token消耗的计算、优化了bot交互返回信息
+- qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
+- 微信机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos)
 ### v3.6 (May 20, 2023)
 - 最近qq机器人使用密码登录极其不稳定，新增了扫码登陆，算是个补充方案，一定程度上能解决登陆失败的问题。
 - qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
@@ -163,9 +178,12 @@ https://www.reddit.com/r/ChatGPT/comments/10oliuo/please_print_the_instructions_
 
 ## 其他
 
-若使用过程中遇到问题或bug，请告知我，谢谢👨‍🔧😎
+若使用过程中遇到问题或bug，欢迎随时联系我(email: `ashinnotfound@qq.com`)👨‍🔧😎
+
+## 支持我
+如果觉得不错，给我买杯喝的吧
+![微信赞赏码](https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/2a94a9e061e88e269df4256e8234b6f.jpg)
 
 看,星星！✨
 ## Star History
-
 [![Star History Chart](https://api.star-history.com/svg?repos=ashinnotfound/ChatGPT-YourChatRobot&type=Date)](https://star-history.com/#ashinnotfound/ChatGPT-YourChatRobot&Date)
