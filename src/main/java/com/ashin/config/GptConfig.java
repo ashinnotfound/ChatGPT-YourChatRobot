@@ -7,14 +7,18 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 /**
- * chatgpt配置
+ * gpt配置
  *
  * @author ashinnotfound
  * @date 2023/03/04
  */
 @Data
 @Component
-@ConfigurationProperties("chatgpt")
-public class ChatgptConfig {
+@ConfigurationProperties("gpt")
+public class GptConfig {
+    private String model;
+    private Integer maxToken;
+    private Double temperature;
+    private List<String> basicPrompt;
     private List<String> apiKey;
 }
