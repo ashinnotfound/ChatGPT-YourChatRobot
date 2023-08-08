@@ -29,8 +29,8 @@ public class QqMessageHandler implements ListenerHost {
     private InteractService interactService;
     @Resource
     private QqConfig qqConfig;
-
-    private static final String RESET_WORD = "重置会话";
+    @Resource
+    private BotUtil botUtil;
 
     /**
      * 好友消息事件
@@ -62,9 +62,9 @@ public class QqMessageHandler implements ListenerHost {
         }
     }
     private void response(@NotNull MessageEvent event, ChatBO chatBO, String prompt) {
-        if (RESET_WORD.equals(prompt)) {
+        if (qqConfig.getResetWord().equals(prompt)) {
             //检测到重置会话指令
-            BotUtil.resetPrompt(chatBO.getSessionId());
+            botUtil.resetPrompt(chatBO.getSessionId());
             event.getSubject().sendMessage("重置会话成功");
         } else {
             String response;

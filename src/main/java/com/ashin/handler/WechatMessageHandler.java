@@ -1,5 +1,6 @@
 package com.ashin.handler;
 
+import com.ashin.config.WechatConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
@@ -19,54 +20,46 @@ import javax.annotation.Resource;
  */
 @Component
 public class WechatMessageHandler implements IMsgHandlerFace {
-
     @Resource
     private InteractService interactService;
-
-    private static final String RESET_WORD = "重置会话";
+    @Resource
+    private WechatConfig wechatConfig;
+    @Resource
+    private BotUtil botUtil;
 
     @Override
     public String textMsgHandle(BaseMsg baseMsg) {
-        ChatBO chatBO = new ChatBO();
         //如果是在群聊
         if (baseMsg.isGroupMsg()){
             //存在@机器人的消息就向ChatGPT提问
             if (baseMsg.getText().contains("@"+ Core.getInstance().getNickName())){
                 //去除@再提问
                 String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName() + " ", "").trim();
-                if (RESET_WORD.equals(prompt)){
-                    BotUtil.resetPrompt(baseMsg.getFromUserName());
-                    return "重置会话成功";
-                }else {
-                    chatBO.setPrompt(prompt);
-                    chatBO.setSessionId(baseMsg.getFromUserName());
-                    String response;
-                    try {
-                        response = interactService.chat(chatBO);
-                    } catch (ChatException e) {
-                        response = e.getMessage();
-                    }
-                    return response;
-                }
+                return textResponse(baseMsg.getFromUserName(), prompt);
             }
         }else {
             //不是在群聊 则直接回复
-            if (RESET_WORD.equals(baseMsg.getText())){
-                BotUtil.resetPrompt(baseMsg.getFromUserName());
-                return "重置会话成功";
-            }else {
-                chatBO.setPrompt(baseMsg.getText());
-                chatBO.setSessionId(baseMsg.getFromUserName());
-                String response;
-                try {
-                    response = interactService.chat(chatBO);
-                } catch (ChatException e) {
-                    response = e.getMessage();
-                }
-                return response;
-            }
+            return textResponse(baseMsg.getFromUserName(), baseMsg.getText());
         }
         return null;
+    }
+
+    private String textResponse(String userName, String content) {
+        if (wechatConfig.getResetWord().equals(content)){
+            botUtil.resetPrompt(userName);
+            return "重置会话成功";
+        }else {
+            ChatBO chatBO = new ChatBO();
+            chatBO.setPrompt(content);
+            chatBO.setSessionId(userName);
+            String response;
+            try {
+                response = interactService.chat(chatBO);
+            } catch (ChatException e) {
+                response = e.getMessage();
+            }
+            return response;
+        }
     }
 
     @Override
@@ -91,7 +84,6 @@ public class WechatMessageHandler implements IMsgHandlerFace {
 
     @Override
     public void sysMsgHandle(BaseMsg baseMsg) {
-
     }
 
     @Override
