@@ -1,5 +1,6 @@
 package com.ashin.handler;
 
+import com.ashin.config.KeywordConfig;
 import com.ashin.config.WechatConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
@@ -23,7 +24,7 @@ public class WechatMessageHandler implements IMsgHandlerFace {
     @Resource
     private InteractService interactService;
     @Resource
-    private WechatConfig wechatConfig;
+    private KeywordConfig keywordConfig;
     @Resource
     private BotUtil botUtil;
 
@@ -45,7 +46,7 @@ public class WechatMessageHandler implements IMsgHandlerFace {
     }
 
     private String textResponse(String userName, String content) {
-        if (wechatConfig.getResetWord().equals(content)){
+        if (keywordConfig.getResetWord().equals(content)){
             botUtil.resetPrompt(userName);
             return "重置会话成功";
         }else {

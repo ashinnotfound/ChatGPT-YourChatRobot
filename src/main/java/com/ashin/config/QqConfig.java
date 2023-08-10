@@ -20,5 +20,4 @@ public class QqConfig {
     private String password;
     private Boolean acceptNewFriend;
     private Boolean acceptNewGroup;
-    private String resetWord;
 }

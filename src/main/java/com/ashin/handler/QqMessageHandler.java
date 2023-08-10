@@ -1,5 +1,6 @@
 package com.ashin.handler;
 
+import com.ashin.config.KeywordConfig;
 import com.ashin.config.QqConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
@@ -29,6 +30,8 @@ public class QqMessageHandler implements ListenerHost {
     private InteractService interactService;
     @Resource
     private QqConfig qqConfig;
+    @Resource
+    private KeywordConfig keywordConfig;
     @Resource
     private BotUtil botUtil;
 
@@ -62,7 +65,7 @@ public class QqMessageHandler implements ListenerHost {
         }
     }
     private void response(@NotNull MessageEvent event, ChatBO chatBO, String prompt) {
-        if (qqConfig.getResetWord().equals(prompt)) {
+        if (keywordConfig.getResetWord().equals(prompt)) {
             //检测到重置会话指令
             botUtil.resetPrompt(chatBO.getSessionId());
             event.getSubject().sendMessage("重置会话成功");

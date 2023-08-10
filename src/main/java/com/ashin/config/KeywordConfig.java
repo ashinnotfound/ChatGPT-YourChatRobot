@@ -5,15 +5,15 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
- * 微信配置
+ * 关键字配置
  *
  * @author ashinnotfound
- * @date 2023/03/19
+ * @date 2023/08/10
  */
 @Data
 @Component
-@ConfigurationProperties("wechat")
-public class WechatConfig {
-    private Boolean enable;
-    private String qrPath;
+@ConfigurationProperties("keyword")
+public class KeywordConfig {
+    private String resetWord;
+    private String imageGeneration;
 }

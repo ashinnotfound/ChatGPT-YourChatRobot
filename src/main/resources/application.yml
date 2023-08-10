@@ -33,13 +33,16 @@ qq:
   acceptNewFriend: false
   #  是否自动同意被邀请入群
   acceptNewGroup: false
-  #  重置会话指令
-  resetWord: "重置会话"
 
 wechat:
   #  是否使用微信 true/false
   enable: false
   #  生成的登录二维码路径 默认与项目同级
   qrPath: "./"
+
+keyword:
   #  重置会话指令
   resetWord: "重置会话"
+  #  ai画图指令(DALL·E模型 https://platform.openai.com/docs/models/dall-e)
+  #  generation 根据关键词生成图片(https://platform.openai.com/docs/guides/images/generations)
+  imageGeneration: "ai生成图片"
