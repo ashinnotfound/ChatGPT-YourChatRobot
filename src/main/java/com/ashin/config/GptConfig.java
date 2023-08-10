@@ -21,4 +21,5 @@ public class GptConfig {
     private Double temperature;
     private List<String> basicPrompt;
     private List<String> apiKey;
+    private Long ofSeconds;
 }
