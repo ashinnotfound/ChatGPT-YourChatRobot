@@ -4,6 +4,8 @@
 > - 无需为此功能额外配置apikey，使用原先的即可 
 > - 可先在feat/image分支或release里的beta版试用 
 > - --- 2023.8.10
+> 
+> <img src="https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/f5cb7fb04594b894edf8d614ca3fe5f.jpg" style="zoom:25%;" /><img src="https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/28894abd84617a4efca4ddf9c3abc99.jpg" style="zoom:25%;" />
 
 ## 简介
 
@@ -137,7 +139,7 @@ tips：机器人响应速度与你的网络环境挂钩。
 - 最近qq机器人使用密码登录极其不稳定，新增了扫码登陆，算是个补充方案，一定程度上能解决登陆失败的问题。
 - qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
 - 微信机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos)
-    
+  
 ### v3.5 (Mar 19, 2023)
 - 今天在github冲浪的时候发现，2023了竟然还有能用的java微信sdk！！！
 - 现在你也可以将微信也变成chatgpt了🥰🥰🥰
