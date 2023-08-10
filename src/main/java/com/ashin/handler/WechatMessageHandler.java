@@ -1,7 +1,6 @@
 package com.ashin.handler;
 
 import com.ashin.config.KeywordConfig;
-import com.ashin.config.WechatConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
@@ -53,6 +52,7 @@ public class WechatMessageHandler implements IMsgHandlerFace {
             ChatBO chatBO = new ChatBO();
             chatBO.setPrompt(content);
             chatBO.setSessionId(userName);
+            chatBO.setAiDraw(content.startsWith(keywordConfig.getImageGeneration()));
             String response;
             try {
                 response = interactService.chat(chatBO);

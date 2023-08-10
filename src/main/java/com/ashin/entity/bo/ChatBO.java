@@ -18,4 +18,8 @@ public class ChatBO {
      * 问题
      */
     private String prompt;
+    /**
+     * 是否ai画图功能
+     */
+    private boolean isAiDraw;
 }

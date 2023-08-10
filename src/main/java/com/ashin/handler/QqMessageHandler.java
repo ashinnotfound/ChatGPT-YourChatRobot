@@ -73,6 +73,7 @@ public class QqMessageHandler implements ListenerHost {
             String response;
             try {
                 chatBO.setPrompt(prompt);
+                chatBO.setAiDraw(prompt.startsWith(keywordConfig.getImageGeneration()));
                 response = interactService.chat(chatBO);
             }catch (ChatException e){
                 response = e.getMessage();
