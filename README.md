@@ -4,6 +4,8 @@
 > - 无需为此功能额外配置apikey，使用原先的即可 
 > - 可先在feat/image分支或release里的beta版试用 
 > - --- 2023.8.10
+> 
+> <img src="https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/f5cb7fb04594b894edf8d614ca3fe5f.jpg" style="zoom:25%;" /><img src="https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/28894abd84617a4efca4ddf9c3abc99.jpg" style="zoom:25%;" />
 
 ## 简介
 
@@ -63,6 +65,8 @@ gpt:
   maxToken: 2048
   # 信息熵 越高回答越随机(Higher values like 0.8 will make the output more random, while lower values like 0.2 will make it more focused and deterministic.---via OPENAI)
   temperature: 0.5
+  # 最大请求时间 超时自动中断请求
+  ofSeconds: 10000
   # 基础提问 支持多个提问 可用来设定人格(对应api中的system角色)
   basicPrompt:
     - "用中文回答我的问题"
@@ -82,16 +86,19 @@ qq:
   acceptNewFriend: false
   #  是否自动同意被邀请入群
   acceptNewGroup: false
-  #  重置会话指令
-  resetWord: "重置会话"
 
 wechat:
   #  是否使用微信 true/false
   enable: false
   #  生成的登录二维码路径 默认与项目同级
   qrPath: "./"
+
+keyword:
   #  重置会话指令
   resetWord: "重置会话"
+  #  ai画图指令(DALL·E模型 https://platform.openai.com/docs/models/dall-e)
+  #  generation 根据关键词生成图片(https://platform.openai.com/docs/guides/images/generations)
+  imageGeneration: "ai生成图片"
 ```
 
 3.  然后 run！！！😁😁😁
@@ -137,7 +144,7 @@ tips：机器人响应速度与你的网络环境挂钩。
 - 最近qq机器人使用密码登录极其不稳定，新增了扫码登陆，算是个补充方案，一定程度上能解决登陆失败的问题。
 - qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
 - 微信机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos)
-    
+  
 ### v3.5 (Mar 19, 2023)
 - 今天在github冲浪的时候发现，2023了竟然还有能用的java微信sdk！！！
 - 现在你也可以将微信也变成chatgpt了🥰🥰🥰
