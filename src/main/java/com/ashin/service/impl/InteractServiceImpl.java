@@ -54,10 +54,12 @@ public class InteractServiceImpl implements InteractService {
         } catch (OpenAiHttpException e) {
             log.error("向gpt提问失败，提问内容：{}，\n原因：{}\n", chatBO.getPrompt(), e.getMessage(), e);
             // https://platform.openai.com/docs/guides/error-codes/api-errors
-            if (401 == e.statusCode) {
+            if (400 == e.statusCode) {
+                throw new ChatException("提问失败: 你的提问被OPENAI安全系统拒绝，请检查是否有敏感词等");
+            } else if (401 == e.statusCode) {
                 throw new ChatException("提问失败: 无效的apikey, 请确保apikey正确且你拥有权限");
             } else if (429 == e.statusCode) {
-                throw new ChatException("提问过于频繁 或者 apikey余额不足");
+                throw new ChatException("提问失败: 提问过于频繁 或者 apikey余额不足");
             } else if (500 == e.statusCode) {
                 throw new ChatException("提问失败: openai服务异常, 请稍后重试");
             } else if (503 == e.statusCode) {
