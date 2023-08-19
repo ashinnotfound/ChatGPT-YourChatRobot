@@ -6,17 +6,17 @@ import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
+import com.ashin.util.ImageUtil;
+import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.MessageTooLargeException;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
 import net.mamoe.mirai.event.events.*;
-import net.mamoe.mirai.message.data.At;
-import net.mamoe.mirai.message.data.MessageChain;
-import net.mamoe.mirai.message.data.MessageChainBuilder;
-import net.mamoe.mirai.message.data.QuoteReply;
+import net.mamoe.mirai.message.data.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
+import java.io.File;
 
 /**
  * QQ消息处理程序
@@ -79,11 +79,17 @@ public class QqMessageHandler implements ListenerHost {
                 response = e.getMessage();
             }
             try {
-                MessageChain messages = new MessageChainBuilder()
-                        .append(new QuoteReply(event.getMessage()))
-                        .append(response)
-                        .build();
-                event.getSubject().sendMessage(messages);
+                if (chatBO.isAiDraw()){
+                    File file = ImageUtil.download(response);
+                    Contact.sendImage(event.getSubject(), file);
+                    file.delete();
+                }else {
+                    MessageChain messages = new MessageChainBuilder()
+                            .append(new QuoteReply(event.getMessage()))
+                            .append(response)
+                            .build();
+                    event.getSubject().sendMessage(messages);
+                }
             }catch (MessageTooLargeException e){
                 //信息太大，无法引用，采用直接回复
                 event.getSubject().sendMessage(response);
