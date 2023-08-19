@@ -65,6 +65,8 @@ public class InteractServiceImpl implements InteractService {
             } else if (503 == e.statusCode) {
                 throw new ChatException("提问失败: openai服务过载, 请稍后重试");
             }
+        } catch (RuntimeException e) {
+            throw new ChatException("提问失败: 大概率网络异常, 具体: " + e.getMessage());
         }
         if (null == answer) {
             throw new ChatException("提问失败: 未知错误, 若频繁出现请提issue");
