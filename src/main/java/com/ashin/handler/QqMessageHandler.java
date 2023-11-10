@@ -1,21 +1,23 @@
 package com.ashin.handler;
 
+import com.ashin.config.KeywordConfig;
 import com.ashin.config.QqConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
+import com.ashin.util.ImageUtil;
+import lombok.extern.slf4j.Slf4j;
+import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.MessageTooLargeException;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
 import net.mamoe.mirai.event.events.*;
-import net.mamoe.mirai.message.data.At;
-import net.mamoe.mirai.message.data.MessageChain;
-import net.mamoe.mirai.message.data.MessageChainBuilder;
-import net.mamoe.mirai.message.data.QuoteReply;
+import net.mamoe.mirai.message.data.*;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
+import java.io.File;
 
 /**
  * QQ消息处理程序
@@ -24,11 +26,14 @@ import javax.annotation.Resource;
  * @date 2023/2/1
  */
 @Component
+@Slf4j
 public class QqMessageHandler implements ListenerHost {
     @Resource
     private InteractService interactService;
     @Resource
     private QqConfig qqConfig;
+    @Resource
+    private KeywordConfig keywordConfig;
     @Resource
     private BotUtil botUtil;
 
@@ -62,7 +67,7 @@ public class QqMessageHandler implements ListenerHost {
         }
     }
     private void response(@NotNull MessageEvent event, ChatBO chatBO, String prompt) {
-        if (qqConfig.getResetWord().equals(prompt)) {
+        if (keywordConfig.getReset().equals(prompt)) {
             //检测到重置会话指令
             botUtil.resetPrompt(chatBO.getSessionId());
             event.getSubject().sendMessage("重置会话成功");
@@ -70,16 +75,25 @@ public class QqMessageHandler implements ListenerHost {
             String response;
             try {
                 chatBO.setPrompt(prompt);
+                chatBO.setAiDraw(prompt.startsWith(keywordConfig.getDraw()));
                 response = interactService.chat(chatBO);
             }catch (ChatException e){
                 response = e.getMessage();
             }
             try {
-                MessageChain messages = new MessageChainBuilder()
-                        .append(new QuoteReply(event.getMessage()))
-                        .append(response)
-                        .build();
-                event.getSubject().sendMessage(messages);
+                if (chatBO.isAiDraw() && !qqConfig.getReturnDrawByURL()){
+                    File file = ImageUtil.download(response);
+                    Contact.sendImage(event.getSubject(), file);
+                    if (!file.delete()){
+                        log.warn("图片({})删除失败, 请注意存储空间", file.getAbsolutePath());
+                    }
+                }else {
+                    MessageChain messages = new MessageChainBuilder()
+                            .append(new QuoteReply(event.getMessage()))
+                            .append(response)
+                            .build();
+                    event.getSubject().sendMessage(messages);
+                }
             }catch (MessageTooLargeException e){
                 //信息太大，无法引用，采用直接回复
                 event.getSubject().sendMessage(response);

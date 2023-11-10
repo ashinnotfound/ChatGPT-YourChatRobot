@@ -1,6 +1,6 @@
 package com.ashin.handler;
 
-import com.ashin.config.WechatConfig;
+import com.ashin.config.KeywordConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
@@ -23,7 +23,7 @@ public class WechatMessageHandler implements IMsgHandlerFace {
     @Resource
     private InteractService interactService;
     @Resource
-    private WechatConfig wechatConfig;
+    private KeywordConfig keywordConfig;
     @Resource
     private BotUtil botUtil;
 
@@ -45,13 +45,14 @@ public class WechatMessageHandler implements IMsgHandlerFace {
     }
 
     private String textResponse(String userName, String content) {
-        if (wechatConfig.getResetWord().equals(content)){
+        if (keywordConfig.getReset().equals(content)){
             botUtil.resetPrompt(userName);
             return "重置会话成功";
         }else {
             ChatBO chatBO = new ChatBO();
             chatBO.setPrompt(content);
             chatBO.setSessionId(userName);
+            chatBO.setAiDraw(content.startsWith(keywordConfig.getDraw()));
             String response;
             try {
                 response = interactService.chat(chatBO);

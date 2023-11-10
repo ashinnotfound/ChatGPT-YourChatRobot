@@ -15,10 +15,10 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("qq")
 public class QqConfig {
     private Boolean enable;
-    private Integer method;
+    private Boolean loginByQRCode;
     private Long account;
     private String password;
     private Boolean acceptNewFriend;
     private Boolean acceptNewGroup;
-    private String resetWord;
+    private Boolean returnDrawByURL;
 }

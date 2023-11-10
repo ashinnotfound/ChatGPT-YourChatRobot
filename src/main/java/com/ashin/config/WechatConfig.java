@@ -16,5 +16,4 @@ import org.springframework.stereotype.Component;
 public class WechatConfig {
     private Boolean enable;
     private String qrPath;
-    private String resetWord;
 }

@@ -39,7 +39,7 @@ public class GptClient {
         for (String apiKey : gptConfig.getApiKey()) {
             apiKey = apiKey.trim();
             if (!apiKey.isEmpty()) {
-                openAiServiceList.add(new OpenAiService(apiKey, Duration.ofSeconds(1000)));
+                openAiServiceList.add(new OpenAiService(apiKey, Duration.ofSeconds(gptConfig.getOfSeconds())));
                 log.info("apiKey为 {} 的账号初始化成功", apiKey);
             }
         }
