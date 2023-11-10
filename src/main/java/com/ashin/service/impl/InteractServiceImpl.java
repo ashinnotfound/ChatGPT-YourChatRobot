@@ -42,7 +42,7 @@ public class InteractServiceImpl implements InteractService {
         try {
             //向gpt提问
             if (chatBO.isAiDraw()) {
-                String description = chatBO.getPrompt().replaceFirst(keywordConfig.getImageGeneration() + " ", "");
+                String description = chatBO.getPrompt().replaceFirst(keywordConfig.getDraw() + " ", "");
                 CreateImageRequest createImageRequest = CreateImageRequest.builder().n(1).size("1024x1024").prompt(description).build();
                 answer = new ChatMessage();
                 answer.setRole("assistant");

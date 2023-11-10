@@ -45,14 +45,14 @@ public class WechatMessageHandler implements IMsgHandlerFace {
     }
 
     private String textResponse(String userName, String content) {
-        if (keywordConfig.getResetWord().equals(content)){
+        if (keywordConfig.getReset().equals(content)){
             botUtil.resetPrompt(userName);
             return "重置会话成功";
         }else {
             ChatBO chatBO = new ChatBO();
             chatBO.setPrompt(content);
             chatBO.setSessionId(userName);
-            chatBO.setAiDraw(content.startsWith(keywordConfig.getImageGeneration()));
+            chatBO.setAiDraw(content.startsWith(keywordConfig.getDraw()));
             String response;
             try {
                 response = interactService.chat(chatBO);

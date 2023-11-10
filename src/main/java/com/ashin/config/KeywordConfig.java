@@ -14,6 +14,6 @@ import org.springframework.stereotype.Component;
 @Component
 @ConfigurationProperties("keyword")
 public class KeywordConfig {
-    private String resetWord;
-    private String imageGeneration;
+    private String reset;
+    private String draw;
 }
