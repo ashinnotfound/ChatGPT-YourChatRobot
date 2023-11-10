@@ -1,11 +1,10 @@
 # ChatGPT-YourChatRobot
 
-> ### NEWS: 正在尝试接入OPENAI的ai画图功能([DALL·E模型](https://platform.openai.com/docs/models/dall-e))
+> ### NEWS: 已接入OPENAI的ai画图功能([DALL·E模型](https://platform.openai.com/docs/models/dall-e))
 > - 无需为此功能额外配置apikey，使用原先的即可 
-> - 可先在feat/image分支或release里的beta版试用 
-> - --- 2023.8.10
-> 
-> <img src="https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/f5cb7fb04594b894edf8d614ca3fe5f.jpg" style="zoom:25%;" /><img src="https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/28894abd84617a4efca4ddf9c3abc99.jpg" style="zoom:25%;" />
+> - 默认指令 “ai画图” 可在配置选项修改，亦可修改返回图片方式(限qq机器人)
+> ![](https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-11-10%20133117.png)![](https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202023-11-10%20132601.png)
+> --- 2023.11.10
 
 ## 简介
 
@@ -29,6 +28,8 @@ qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/
 
 使用mirai/itchat登录qq/微信并监听消息->调用openai接口将消息向gpt提问->使用mirai/itchat在qq/微信里回复gpt的回答
 
+其中ai画图采用[DALL·E模型](https://platform.openai.com/docs/models/dall-e)的[generation方法](https://platform.openai.com/docs/guides/images/generations)
+
 ## 使用
 
 ❤❤❤ 开箱即用!!! ❤❤❤
@@ -48,7 +49,6 @@ qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/
         并把它们配置在application.yml里:
 
 ```
-//这是application.yml文件
 proxy:
   #  代理配置
   #  国内墙了gpt的api，所以得用代理，一般你使用的代理软件会有相关信息，例子：
@@ -77,15 +77,18 @@ gpt:
 qq:
   #  是否使用qq true/false
   enable: true
-  #  登陆方法：1.密码登录 2.扫码登录(推荐)
-  method: 2
-  #  qq账号密码(扫码登录则无需填写账号密码)
+  #  登陆方法：true扫码登录(推荐) false密码登录
+  loginByQRCode: true
+  #  qq账号密码
   account:
+  #  (扫码登录则无需填写密码)
   password:
   #  是否自动同意好友申请
   acceptNewFriend: false
   #  是否自动同意被邀请入群
   acceptNewGroup: false
+  #  ai画图时返回方法: true链接(更快) false图片
+  returnDrawByURL: true
 
 wechat:
   #  是否使用微信 true/false
@@ -95,10 +98,10 @@ wechat:
 
 keyword:
   #  重置会话指令
-  resetWord: "重置会话"
+  reset: "重置会话"
   #  ai画图指令(DALL·E模型 https://platform.openai.com/docs/models/dall-e)
   #  generation 根据关键词生成图片(https://platform.openai.com/docs/guides/images/generations)
-  imageGeneration: "ai生成图片"
+  draw: "ai画图"
 ```
 
 3.  然后 run！！！😁😁😁
@@ -135,7 +138,11 @@ tips：机器人响应速度与你的网络环境挂钩。
 <details>
 
 <summary></summary>
-    
+
+### v3.8 (NOV 10, 2023)
+- 把之前写的([DALL·E模型](https://platform.openai.com/docs/models/dall-e))接入完善了，现在可以在聊天中直接调用其进行ai画图
+- qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
+- 微信机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos)
 ### v3.7 (Aug 8, 2023)
 - 最近有空能闲下来看看这个项目，主要更新了项目依赖、优化了下代码结构、增加了token消耗的计算、优化了bot交互返回信息
 - qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)和[mamoe/mirai](https://github.com/mamoe/mirai.git)
