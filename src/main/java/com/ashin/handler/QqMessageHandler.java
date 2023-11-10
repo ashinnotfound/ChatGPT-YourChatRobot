@@ -7,6 +7,7 @@ import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
 import com.ashin.util.ImageUtil;
+import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.contact.Contact;
 import net.mamoe.mirai.contact.MessageTooLargeException;
 import net.mamoe.mirai.event.EventHandler;
@@ -25,6 +26,7 @@ import java.io.File;
  * @date 2023/2/1
  */
 @Component
+@Slf4j
 public class QqMessageHandler implements ListenerHost {
     @Resource
     private InteractService interactService;
@@ -65,7 +67,7 @@ public class QqMessageHandler implements ListenerHost {
         }
     }
     private void response(@NotNull MessageEvent event, ChatBO chatBO, String prompt) {
-        if (keywordConfig.getResetWord().equals(prompt)) {
+        if (keywordConfig.getReset().equals(prompt)) {
             //检测到重置会话指令
             botUtil.resetPrompt(chatBO.getSessionId());
             event.getSubject().sendMessage("重置会话成功");
@@ -73,16 +75,18 @@ public class QqMessageHandler implements ListenerHost {
             String response;
             try {
                 chatBO.setPrompt(prompt);
-                chatBO.setAiDraw(prompt.startsWith(keywordConfig.getImageGeneration()));
+                chatBO.setAiDraw(prompt.startsWith(keywordConfig.getDraw()));
                 response = interactService.chat(chatBO);
             }catch (ChatException e){
                 response = e.getMessage();
             }
             try {
-                if (chatBO.isAiDraw()){
+                if (chatBO.isAiDraw() && !qqConfig.getReturnDrawByURL()){
                     File file = ImageUtil.download(response);
                     Contact.sendImage(event.getSubject(), file);
-                    file.delete();
+                    if (!file.delete()){
+                        log.warn("图片({})删除失败, 请注意存储空间", file.getAbsolutePath());
+                    }
                 }else {
                     MessageChain messages = new MessageChainBuilder()
                             .append(new QuoteReply(event.getMessage()))
