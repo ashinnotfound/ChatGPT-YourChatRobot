@@ -15,9 +15,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties("qq")
 public class QqConfig {
     private Boolean enable;
-    private Boolean loginByQRCode;
     private Long account;
-    private String password;
     private Boolean acceptNewFriend;
     private Boolean acceptNewGroup;
     private Boolean returnDrawByURL;
