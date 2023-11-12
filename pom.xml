@@ -38,19 +38,6 @@
             <artifactId>mirai-core-jvm</artifactId>
             <version>2.16.0</version>
         </dependency>
-<!--        临时修复qq登录组件     https://github.com/cssxsh/fix-protocol-version.git     -->
-        <dependency>
-            <groupId>mirai</groupId>
-            <artifactId>fix-protocol</artifactId>
-            <version>1.12.0</version>
-            <scope>system</scope>
-            <systemPath>${pom.basedir}/src/main/resources/fix-protocol-version-1.12.0.mirai2.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>org.asynchttpclient</groupId>
-            <artifactId>async-http-client</artifactId>
-            <version>2.12.3</version>
-        </dependency>
 <!--        微信          -->
         <dependency>
             <groupId>itchat</groupId>
