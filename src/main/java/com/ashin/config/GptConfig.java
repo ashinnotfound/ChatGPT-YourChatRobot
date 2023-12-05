@@ -22,4 +22,6 @@ public class GptConfig {
     private List<String> basicPrompt;
     private List<String> apiKey;
     private Long ofSeconds;
+    private String imageQuality;
+    private String imageStyle;
 }

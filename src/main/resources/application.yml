@@ -23,6 +23,11 @@ gpt:
   #  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
     -
+  # ai画图图片质量 standard 或 hd
+  imageQuality: standard
+  # ai画图图片风格 vivid 或 natural
+  imageStyle: vivid
+
 qq:
   #  是否使用qq true/false
   enable: true

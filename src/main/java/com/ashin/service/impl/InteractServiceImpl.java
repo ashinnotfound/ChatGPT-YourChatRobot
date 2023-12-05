@@ -1,5 +1,6 @@
 package com.ashin.service.impl;
 
+import com.ashin.config.GptConfig;
 import com.ashin.config.KeywordConfig;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.exception.ChatException;
@@ -29,6 +30,8 @@ public class InteractServiceImpl implements InteractService {
     private BotUtil botUtil;
     @Resource
     private KeywordConfig keywordConfig;
+    @Resource
+    private GptConfig gptConfig;
 
     @Override
     public String chat(ChatBO chatBO) throws ChatException {
@@ -43,7 +46,7 @@ public class InteractServiceImpl implements InteractService {
             //向gpt提问
             if (chatBO.isAiDraw()) {
                 String description = chatBO.getPrompt().replaceFirst(keywordConfig.getDraw() + " ", "");
-                CreateImageRequest createImageRequest = CreateImageRequest.builder().n(1).size("1024x1024").prompt(description).build();
+                CreateImageRequest createImageRequest = CreateImageRequest.builder().n(1).size("1024x1024").prompt(description).model("dall-e-3").quality(gptConfig.getImageQuality()).style(gptConfig.getImageStyle()).build();
                 answer = new ChatMessage();
                 answer.setRole("assistant");
                 answer.setContent(botUtil.getOpenAiService().createImage(createImageRequest).getData().get(0).getUrl());

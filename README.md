@@ -73,16 +73,17 @@ gpt:
   #  openai的apikey
   #  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
-    -
+    - 
+  # ai画图图片质量 standard 或 hd
+  imageQuality: standard
+  # ai画图图片风格 vivid 或 natural
+  imageStyle: vivid
+
 qq:
   #  是否使用qq true/false
   enable: true
-  #  登陆方法：true扫码登录(推荐) false密码登录
-  loginByQRCode: true
-  #  qq账号密码
+  #  qq账号
   account:
-  #  (扫码登录则无需填写密码)
-  password:
   #  是否自动同意好友申请
   acceptNewFriend: false
   #  是否自动同意被邀请入群
