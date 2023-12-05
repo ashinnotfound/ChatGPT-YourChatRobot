@@ -15,8 +15,6 @@ import net.mamoe.mirai.event.ListenerHost;
 import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.*;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
-import javax.annotation.Resource;
 import java.io.File;
 
 /**
@@ -25,17 +23,19 @@ import java.io.File;
  * @author ashinnotfound
  * @date 2023/2/1
  */
-@Component
 @Slf4j
 public class QqMessageHandler implements ListenerHost {
-    @Resource
-    private InteractService interactService;
-    @Resource
-    private QqConfig qqConfig;
-    @Resource
-    private KeywordConfig keywordConfig;
-    @Resource
-    private BotUtil botUtil;
+    private final InteractService interactService;
+    private final QqConfig qqConfig;
+    private final KeywordConfig keywordConfig;
+    private final BotUtil botUtil;
+
+    public QqMessageHandler(InteractService interactService, QqConfig qqConfig, KeywordConfig keywordConfig, BotUtil botUtil) {
+        this.interactService = interactService;
+        this.qqConfig = qqConfig;
+        this.keywordConfig = keywordConfig;
+        this.botUtil = botUtil;
+    }
 
     /**
      * 好友消息事件

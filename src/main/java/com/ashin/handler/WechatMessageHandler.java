@@ -8,9 +8,6 @@ import com.ashin.util.BotUtil;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import cn.zhouyafeng.itchat4j.core.Core;
 import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
-import org.springframework.stereotype.Component;
-
-import javax.annotation.Resource;
 
 /**
  * 微信消息处理程序
@@ -18,14 +15,16 @@ import javax.annotation.Resource;
  * @author ashinnotfound
  * @date 2023/03/19
  */
-@Component
 public class WechatMessageHandler implements IMsgHandlerFace {
-    @Resource
-    private InteractService interactService;
-    @Resource
-    private KeywordConfig keywordConfig;
-    @Resource
-    private BotUtil botUtil;
+    private final InteractService interactService;
+    private final KeywordConfig keywordConfig;
+    private final BotUtil botUtil;
+
+    public WechatMessageHandler(InteractService interactService, KeywordConfig keywordConfig, BotUtil botUtil) {
+        this.interactService = interactService;
+        this.keywordConfig = keywordConfig;
+        this.botUtil = botUtil;
+    }
 
     @Override
     public String textMsgHandle(BaseMsg baseMsg) {
