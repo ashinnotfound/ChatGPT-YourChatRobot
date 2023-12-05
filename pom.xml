@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.ashin</groupId>
     <artifactId>ChatGPT-YourChatRobot</artifactId>
-    <version>3.8</version>
+    <version>3.9</version>
     <name>myGPT</name>
     <description>快来把你的qq或微信变为chatgpt</description>
     <properties>
@@ -50,7 +50,7 @@
         <dependency>
             <groupId>com.theokanning.openai-gpt3-java</groupId>
             <artifactId>service</artifactId>
-            <version>0.16.1</version>
+            <version>0.18.2</version>
         </dependency>
         <dependency>
             <groupId>com.knuddels</groupId>
