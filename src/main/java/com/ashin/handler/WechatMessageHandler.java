@@ -1,8 +1,8 @@
 package com.ashin.handler;
 
 import com.ashin.config.KeywordConfig;
+import com.ashin.constant.ChatType;
 import com.ashin.entity.bo.ChatBO;
-import com.ashin.exception.ChatException;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
@@ -51,14 +51,16 @@ public class WechatMessageHandler implements IMsgHandlerFace {
             ChatBO chatBO = new ChatBO();
             chatBO.setPrompt(content);
             chatBO.setSessionId(userName);
-            chatBO.setAiDraw(content.startsWith(keywordConfig.getDraw()));
-            String response;
-            try {
-                response = interactService.chat(chatBO);
-            } catch (ChatException e) {
-                response = e.getMessage();
+            if (content.startsWith(keywordConfig.getImage())) {
+                chatBO.setPrompt(content.replaceFirst(keywordConfig.getImage() + " ", ""));
+                chatBO.setChatType(ChatType.IMAGE);
+            } else if (content.startsWith(keywordConfig.getAudio())) {
+                return "微信暂不支持语音回复";
+            } else {
+                chatBO.setPrompt(content);
+                chatBO.setChatType(ChatType.TEXT);
             }
-            return response;
+            return interactService.chat(chatBO).getStringResult();
         }
     }
 

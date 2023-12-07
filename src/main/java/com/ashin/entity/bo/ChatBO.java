@@ -1,5 +1,6 @@
 package com.ashin.entity.bo;
 
+import com.ashin.constant.ChatType;
 import lombok.Data;
 
 /**
@@ -21,5 +22,5 @@ public class ChatBO {
     /**
      * 是否ai画图功能
      */
-    private boolean isAiDraw;
+    private ChatType chatType;
 }
