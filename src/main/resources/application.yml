@@ -23,11 +23,18 @@ gpt:
   #  支持多个key（虽然有判空，但仍然建议有多少个写多少个，别留空👨‍🔧）
   apiKey:
     -
-  # ai画图图片质量 standard 或 hd
+  # ai画图
+  # 图片质量 standard 或 hd
   imageQuality: standard
-  # ai画图图片风格 vivid 或 natural
+  # 图片风格 vivid 或 natural
   imageStyle: vivid
-
+  # ai语音
+  # 语音模型 tts-1 或 tts-1-hd
+  audioModel: tts-1
+  # 声音 alloy, echo, fable, onyx, nova, shimmer.
+  audioVoice: alloy
+  # 速度 0.25 到 4.0 之间
+  audioSpeed: 1.0
 qq:
   #  是否使用qq true/false
   enable: true
@@ -37,8 +44,6 @@ qq:
   acceptNewFriend: false
   #  是否自动同意被邀请入群
   acceptNewGroup: false
-  #  ai画图时返回方法: true链接(更快) false图片
-  returnDrawByURL: true
 
 wechat:
   #  是否使用微信 true/false
@@ -51,4 +56,6 @@ keyword:
   reset: "重置会话"
   #  ai画图指令(DALL·E模型 https://platform.openai.com/docs/models/dall-e)
   #  generation 根据关键词生成图片(https://platform.openai.com/docs/guides/images/generations)
-  draw: "ai画图"
+  image: "ai画图"
+  #  ai语音指令(TTS模型 https://platform.openai.com/docs/api-reference/audio)
+  audio: "ai语音"

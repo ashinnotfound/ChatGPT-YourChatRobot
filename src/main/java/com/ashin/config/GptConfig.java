@@ -24,4 +24,7 @@ public class GptConfig {
     private Long ofSeconds;
     private String imageQuality;
     private String imageStyle;
+    private String audioModel;
+    private String audioVoice;
+    private Double audioSpeed;
 }
