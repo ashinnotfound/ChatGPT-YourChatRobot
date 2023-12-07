@@ -1,7 +1,7 @@
 package com.ashin.service;
 
 import com.ashin.entity.bo.ChatBO;
-import com.ashin.exception.ChatException;
+import com.ashin.entity.dto.ChatResultDTO;
 
 /**
  * 交互服务
@@ -14,8 +14,7 @@ public interface InteractService {
      * 聊天
      *
      * @param chatBO 聊天BO
-     * @return {@link String}
-     * @throws ChatException 聊天异常
+     * @return {@code Object}
      */
-    String chat(ChatBO chatBO) throws ChatException;
+    ChatResultDTO chat(ChatBO chatBO);
 }

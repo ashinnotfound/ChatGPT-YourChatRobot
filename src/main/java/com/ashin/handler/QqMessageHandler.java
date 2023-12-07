@@ -2,22 +2,24 @@ package com.ashin.handler;
 
 import com.ashin.config.KeywordConfig;
 import com.ashin.config.QqConfig;
+import com.ashin.constant.ChatType;
 import com.ashin.entity.bo.ChatBO;
-import com.ashin.exception.ChatException;
+import com.ashin.entity.dto.ChatResultDTO;
 import com.ashin.service.InteractService;
 import com.ashin.util.BotUtil;
-import com.ashin.util.ImageUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.contact.Contact;
-import net.mamoe.mirai.contact.MessageTooLargeException;
+import net.mamoe.mirai.contact.Friend;
+import net.mamoe.mirai.contact.Group;
 import net.mamoe.mirai.event.EventHandler;
 import net.mamoe.mirai.event.ListenerHost;
 import net.mamoe.mirai.event.events.*;
 import net.mamoe.mirai.message.data.*;
+import net.mamoe.mirai.utils.ExternalResource;
 import org.jetbrains.annotations.NotNull;
-import org.springframework.stereotype.Component;
-import javax.annotation.Resource;
-import java.io.File;
+
+import java.io.IOException;
+import java.io.InputStream;
 
 /**
  * QQ消息处理程序
@@ -25,17 +27,19 @@ import java.io.File;
  * @author ashinnotfound
  * @date 2023/2/1
  */
-@Component
 @Slf4j
 public class QqMessageHandler implements ListenerHost {
-    @Resource
-    private InteractService interactService;
-    @Resource
-    private QqConfig qqConfig;
-    @Resource
-    private KeywordConfig keywordConfig;
-    @Resource
-    private BotUtil botUtil;
+    private final InteractService interactService;
+    private final QqConfig qqConfig;
+    private final KeywordConfig keywordConfig;
+    private final BotUtil botUtil;
+
+    public QqMessageHandler(InteractService interactService, QqConfig qqConfig, KeywordConfig keywordConfig, BotUtil botUtil) {
+        this.interactService = interactService;
+        this.qqConfig = qqConfig;
+        this.keywordConfig = keywordConfig;
+        this.botUtil = botUtil;
+    }
 
     /**
      * 好友消息事件
@@ -43,7 +47,7 @@ public class QqMessageHandler implements ListenerHost {
      * @param event 事件
      */
     @EventHandler
-    public void onFriendMessageEvent(FriendMessageEvent event){
+    public void onFriendMessageEvent(FriendMessageEvent event) {
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
         String prompt = event.getMessage().contentToString().trim();
@@ -56,7 +60,7 @@ public class QqMessageHandler implements ListenerHost {
      * @param event 事件
      */
     @EventHandler
-    public void onGroupMessageEvent(GroupMessageEvent event){
+    public void onGroupMessageEvent(GroupMessageEvent event) {
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
         if (event.getMessage().contains(new At(event.getBot().getId()))) {
@@ -66,37 +70,80 @@ public class QqMessageHandler implements ListenerHost {
             response(event, chatBO, prompt);
         }
     }
+
     private void response(@NotNull MessageEvent event, ChatBO chatBO, String prompt) {
         if (keywordConfig.getReset().equals(prompt)) {
             //检测到重置会话指令
             botUtil.resetPrompt(chatBO.getSessionId());
             event.getSubject().sendMessage("重置会话成功");
         } else {
-            String response;
-            try {
+            if (prompt.startsWith(keywordConfig.getImage())) {
+                chatBO.setPrompt(prompt.replaceFirst(keywordConfig.getImage() + " ", ""));
+                chatBO.setChatType(ChatType.IMAGE);
+            } else if (prompt.startsWith(keywordConfig.getAudio())) {
+                chatBO.setPrompt(prompt.replaceFirst(keywordConfig.getAudio() + " ", ""));
+                chatBO.setChatType(ChatType.AUDIO);
+            } else {
                 chatBO.setPrompt(prompt);
-                chatBO.setAiDraw(prompt.startsWith(keywordConfig.getDraw()));
-                response = interactService.chat(chatBO);
-            }catch (ChatException e){
-                response = e.getMessage();
+                chatBO.setChatType(ChatType.TEXT);
             }
-            try {
-                if (chatBO.isAiDraw() && !qqConfig.getReturnDrawByURL()){
-                    File file = ImageUtil.download(response);
-                    Contact.sendImage(event.getSubject(), file);
-                    if (!file.delete()){
-                        log.warn("图片({})删除失败, 请注意存储空间", file.getAbsolutePath());
+            ChatResultDTO response = interactService.chat(chatBO);
+            switch (chatBO.getChatType()) {
+                case TEXT:
+                    event.getSubject().sendMessage(
+                            new MessageChainBuilder()
+                                    .append(new QuoteReply(event.getMessage()))
+                                    .append(response.getStringResult())
+                                    .build()
+                    );
+                    break;
+                case IMAGE:
+                    if (response.getInputStreamResult() == null) {
+                        event.getSubject().sendMessage(
+                                new MessageChainBuilder()
+                                        .append(new QuoteReply(event.getMessage()))
+                                        .append("ai画图失败, 以下图片url: ").append(response.getStringResult())
+                                        .build()
+                        );
                     }
-                }else {
-                    MessageChain messages = new MessageChainBuilder()
-                            .append(new QuoteReply(event.getMessage()))
-                            .append(response)
-                            .build();
-                    event.getSubject().sendMessage(messages);
-                }
-            }catch (MessageTooLargeException e){
-                //信息太大，无法引用，采用直接回复
-                event.getSubject().sendMessage(response);
+                    try (InputStream inputStream = response.getInputStreamResult()) {
+                        event.getSubject().sendMessage(
+                                new MessageChainBuilder()
+                                        .append(new QuoteReply(event.getMessage()))
+                                        .append(Contact.uploadImage(event.getSubject(), inputStream))
+                                        .build()
+                        );
+                    } catch (IOException e) {
+                        event.getSubject().sendMessage(
+                                new MessageChainBuilder()
+                                        .append(new QuoteReply(event.getMessage()))
+                                        .append("ai画图失败, 以下图片url: ").append(response.getStringResult())
+                                        .build()
+                        );
+                    }
+                    break;
+                case AUDIO:
+                    if (response.getBytesResult() == null) {
+                        event.getSubject().sendMessage("语音回复失败, 以下为文本回复: " + response.getStringResult());
+                    }
+                    OfflineAudio audio = null;
+                    byte[] audioBytes = response.getBytesResult();
+                    try (ExternalResource externalResource = ExternalResource.create(audioBytes)) {
+                        if (event.getSubject() instanceof Group) {
+                            Group group = (Group) event.getSubject();
+                            audio = group.uploadAudio(externalResource);
+                        } else if (event.getSubject() instanceof Friend) {
+                            Friend user = (Friend) event.getSubject();
+                            audio = user.uploadAudio(externalResource);
+                        }
+                        if (audio != null) {
+                            event.getSubject().sendMessage(audio);
+                        } else {
+                            event.getSubject().sendMessage("语音回复失败, 以下为文本回复: " + response.getStringResult());
+                        }
+                    } catch (IOException e) {
+                        event.getSubject().sendMessage("语音回复失败, 以下为文本回复: " + response.getStringResult());
+                    }
             }
         }
     }
@@ -107,8 +154,8 @@ public class QqMessageHandler implements ListenerHost {
      * @param event 事件
      */
     @EventHandler
-    public void onNewFriendRequestEvent(NewFriendRequestEvent event){
-        if (qqConfig.getAcceptNewFriend()){
+    public void onNewFriendRequestEvent(NewFriendRequestEvent event) {
+        if (qqConfig.getAcceptNewFriend()) {
             event.accept();
         }
     }
@@ -119,8 +166,8 @@ public class QqMessageHandler implements ListenerHost {
      * @param event 事件
      */
     @EventHandler
-    public void onNewGroupRequestEvent(BotInvitedJoinGroupRequestEvent event){
-        if (qqConfig.getAcceptNewGroup()){
+    public void onNewGroupRequestEvent(BotInvitedJoinGroupRequestEvent event) {
+        if (qqConfig.getAcceptNewGroup()) {
             event.accept();
         }
     }
