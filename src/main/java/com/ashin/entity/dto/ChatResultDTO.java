@@ -8,4 +8,5 @@ import java.io.InputStream;
 public class ChatResultDTO {
     String StringResult;
     InputStream inputStreamResult;
+    byte[] bytesResult;
 }

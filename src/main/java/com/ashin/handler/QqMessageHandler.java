@@ -98,6 +98,14 @@ public class QqMessageHandler implements ListenerHost {
                     );
                     break;
                 case IMAGE:
+                    if (response.getInputStreamResult() == null) {
+                        event.getSubject().sendMessage(
+                                new MessageChainBuilder()
+                                        .append(new QuoteReply(event.getMessage()))
+                                        .append("ai画图失败, 以下图片url: ").append(response.getStringResult())
+                                        .build()
+                        );
+                    }
                     try (InputStream inputStream = response.getInputStreamResult()) {
                         event.getSubject().sendMessage(
                                 new MessageChainBuilder()
@@ -106,28 +114,35 @@ public class QqMessageHandler implements ListenerHost {
                                         .build()
                         );
                     } catch (IOException e) {
-                        event.getSubject().sendMessage("ai画图失败");
+                        event.getSubject().sendMessage(
+                                new MessageChainBuilder()
+                                        .append(new QuoteReply(event.getMessage()))
+                                        .append("ai画图失败, 以下图片url: ").append(response.getStringResult())
+                                        .build()
+                        );
                     }
                     break;
                 case AUDIO:
+                    if (response.getBytesResult() == null) {
+                        event.getSubject().sendMessage("语音回复失败, 以下为文本回复: " + response.getStringResult());
+                    }
                     OfflineAudio audio = null;
-                    try (InputStream inputStream = response.getInputStreamResult()) {
-                        try (ExternalResource externalResource = ExternalResource.create(inputStream)) {
-                            if (event.getSubject() instanceof Group) {
-                                Group group = (Group) event.getSubject();
-                                audio = group.uploadAudio(externalResource);
-                            } else if (event.getSubject() instanceof Friend) {
-                                Friend user = (Friend) event.getSubject();
-                                audio = user.uploadAudio(externalResource);
-                            }
-                            if (audio != null) {
-                                event.getSubject().sendMessage(audio);
-                            } else {
-                                event.getSubject().sendMessage("语音回复失败");
-                            }
+                    byte[] audioBytes = response.getBytesResult();
+                    try (ExternalResource externalResource = ExternalResource.create(audioBytes)) {
+                        if (event.getSubject() instanceof Group) {
+                            Group group = (Group) event.getSubject();
+                            audio = group.uploadAudio(externalResource);
+                        } else if (event.getSubject() instanceof Friend) {
+                            Friend user = (Friend) event.getSubject();
+                            audio = user.uploadAudio(externalResource);
+                        }
+                        if (audio != null) {
+                            event.getSubject().sendMessage(audio);
+                        } else {
+                            event.getSubject().sendMessage("语音回复失败, 以下为文本回复: " + response.getStringResult());
                         }
                     } catch (IOException e) {
-                        event.getSubject().sendMessage("语音回复失败");
+                        event.getSubject().sendMessage("语音回复失败, 以下为文本回复: " + response.getStringResult());
                     }
             }
         }

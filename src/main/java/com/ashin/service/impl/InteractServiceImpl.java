@@ -59,7 +59,11 @@ public class InteractServiceImpl implements InteractService {
                     String url = botUtil.getOpenAiService().createImage(createImageRequest).getData().get(0).getUrl();
                     answer.setContent(url);
                     res.setStringResult(url);
-                    res.setInputStreamResult(new URL(url).openConnection().getInputStream());
+                    try {
+                        res.setInputStreamResult(new URL(url).openConnection().getInputStream());
+                    } catch (IOException e) {
+                        res.setInputStreamResult(null);
+                    }
                     break;
                 case AUDIO:
                     String input = botUtil.getOpenAiService().createChatCompletion(botUtil.getCompletionRequestBuilder().messages(prompt).build()).getChoices().get(0).getMessage().getContent();
@@ -69,7 +73,11 @@ public class InteractServiceImpl implements InteractService {
                     CreateSpeechRequest createSpeechRequest = CreateSpeechRequest.builder().input(input).model(gptConfig.getAudioModel()).voice(gptConfig.getAudioVoice()).speed(gptConfig.getAudioSpeed()).build();
                     ResponseBody speech = botUtil.getOpenAiService().createSpeech(createSpeechRequest);
                     res.setStringResult(input);
-                    res.setInputStreamResult(speech.byteStream());
+                    try {
+                        res.setBytesResult(speech.bytes());
+                    } catch (IOException e) {
+                        res.setBytesResult(null);
+                    }
                     break;
             }
         } catch (OpenAiHttpException e) {
@@ -88,8 +96,6 @@ public class InteractServiceImpl implements InteractService {
             } else {
                 res.setStringResult("提问失败: " + e.getMessage());
             }
-        } catch (IOException e) {
-            res.setStringResult("提问失败: " + e.getMessage());
         }
 
         prompt.add(answer);
