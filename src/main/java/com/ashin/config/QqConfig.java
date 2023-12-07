@@ -18,5 +18,4 @@ public class QqConfig {
     private Long account;
     private Boolean acceptNewFriend;
     private Boolean acceptNewGroup;
-    private Boolean returnDrawByURL;
 }
