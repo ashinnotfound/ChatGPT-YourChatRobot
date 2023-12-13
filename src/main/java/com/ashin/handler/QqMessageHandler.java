@@ -6,6 +6,7 @@ import com.ashin.constant.ChatType;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.entity.dto.ChatResultDTO;
 import com.ashin.service.InteractService;
+import com.ashin.service.TriggerService;
 import com.ashin.util.BotUtil;
 import lombok.extern.slf4j.Slf4j;
 import net.mamoe.mirai.contact.Contact;
@@ -30,15 +31,17 @@ import java.io.InputStream;
 @Slf4j
 public class QqMessageHandler implements ListenerHost {
     private final InteractService interactService;
+    private final TriggerService triggerService;
     private final QqConfig qqConfig;
     private final KeywordConfig keywordConfig;
     private final BotUtil botUtil;
 
-    public QqMessageHandler(InteractService interactService, QqConfig qqConfig, KeywordConfig keywordConfig, BotUtil botUtil) {
+    public QqMessageHandler(InteractService interactService, QqConfig qqConfig, KeywordConfig keywordConfig, BotUtil botUtil, TriggerService triggerService) {
         this.interactService = interactService;
         this.qqConfig = qqConfig;
         this.keywordConfig = keywordConfig;
         this.botUtil = botUtil;
+        this.triggerService = triggerService;
     }
 
     /**
@@ -51,6 +54,17 @@ public class QqMessageHandler implements ListenerHost {
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
         String prompt = event.getMessage().contentToString().trim();
+        String triggerResponse = triggerService.getResponse(prompt);
+        // 检测用户发送的内容是否触发关键词
+        if (triggerResponse != null) {
+            event.getSubject().sendMessage(
+                    new MessageChainBuilder()
+                            .append(new QuoteReply(event.getMessage()))
+                            .append(triggerResponse)
+                            .build()
+            );
+            return;
+        }
         response(event, chatBO, prompt);
     }
 
@@ -63,10 +77,22 @@ public class QqMessageHandler implements ListenerHost {
     public void onGroupMessageEvent(GroupMessageEvent event) {
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
+
         if (event.getMessage().contains(new At(event.getBot().getId()))) {
             //存在@机器人的消息就向ChatGPT提问
             //去除@再提问
             String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
+            // 检测用户发送的内容是否触发关键词
+            String triggerResponse = triggerService.getResponse(prompt);
+            if (triggerResponse != null) {
+                event.getSubject().sendMessage(
+                        new MessageChainBuilder()
+                                .append(new QuoteReply(event.getMessage()))
+                                .append(triggerResponse)
+                                .build()
+                );
+                return;
+            }
             response(event, chatBO, prompt);
         }
     }

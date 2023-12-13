@@ -59,3 +59,10 @@ keyword:
   image: "ai画图"
   #  ai语音指令(TTS模型 https://platform.openai.com/docs/api-reference/audio)
   audio: "ai语音"
+
+trigger:
+  # TODO: 后续可能会添加一个 enable 配置项
+  triggers:
+    # 注意，在yaml中，请按这个格式 "[中文]"编辑中文关键词
+    "[你好]": "你好，我是智能聊天机器人，请问有什么可以帮助你的吗？"
+    "[hello]": "Hello, I'm YourChatRobot. Nice to meet you!"
