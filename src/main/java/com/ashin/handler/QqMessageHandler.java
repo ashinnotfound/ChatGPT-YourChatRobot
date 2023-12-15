@@ -63,9 +63,9 @@ public class QqMessageHandler implements ListenerHost {
                             .append(triggerResponse)
                             .build()
             );
-            return;
+        } else {
+            response(event, chatBO, prompt);
         }
-        response(event, chatBO, prompt);
     }
 
     /**
@@ -78,10 +78,13 @@ public class QqMessageHandler implements ListenerHost {
         ChatBO chatBO = new ChatBO();
         chatBO.setSessionId(String.valueOf(event.getSubject().getId()));
 
+        // 去除@再提问
+        String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
+
+        // 若存在@机器人的消息，就向ChatGPT提问
         if (event.getMessage().contains(new At(event.getBot().getId()))) {
-            //存在@机器人的消息就向ChatGPT提问
-            //去除@再提问
-            String prompt = event.getMessage().contentToString().replace("@" + event.getBot().getId(), "").trim();
+            response(event, chatBO, prompt);
+        } else {
             // 检测用户发送的内容是否触发关键词
             String triggerResponse = triggerService.getResponse(prompt);
             if (triggerResponse != null) {
@@ -91,9 +94,7 @@ public class QqMessageHandler implements ListenerHost {
                                 .append(triggerResponse)
                                 .build()
                 );
-                return;
             }
-            response(event, chatBO, prompt);
         }
     }
 

@@ -33,19 +33,20 @@ public class WechatMessageHandler implements IMsgHandlerFace {
     public String textMsgHandle(BaseMsg baseMsg) {
         //如果是在群聊
         if (baseMsg.isGroupMsg()){
+            //去除@再提问
+            String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName() + " ", "").trim();
             //存在@机器人的消息就向ChatGPT提问
             if (baseMsg.getText().contains("@"+ Core.getInstance().getNickName())){
-                //去除@再提问
-                String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName() + " ", "").trim();
                 String triggerResponse = triggerService.getResponse(prompt);
                 return (triggerResponse == null) ? textResponse(baseMsg.getFromUserName(), prompt) : triggerResponse;
+            } else {
+                return triggerService.getResponse(baseMsg.getText());
             }
         } else {
-            //不是在群聊 则直接回复
+            // 不是在群聊 则直接回复
             String triggerResponse = triggerService.getResponse(baseMsg.getText());
             return (triggerResponse == null) ? textResponse(baseMsg.getFromUserName(), baseMsg.getText()) : triggerResponse;
         }
-        return null;
     }
 
     private String textResponse(String userName, String content) {
