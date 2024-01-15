@@ -47,7 +47,7 @@ public class BotClient {
         if (qqConfig.getEnable()) {
             //登陆协议有ANDROID_PHONE, ANDROID_PAD, ANDROID_WATCH, IPAD, MACOS
             //若登陆失败可尝试更换协议
-            BotConfiguration.MiraiProtocol miraiProtocol = BotConfiguration.MiraiProtocol.ANDROID_WATCH;
+            BotConfiguration.MiraiProtocol miraiProtocol = BotConfiguration.MiraiProtocol.MACOS;
             try {
                 log.info("正在登录qq,请按提示操作：");
                 //扫码登陆
