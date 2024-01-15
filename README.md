@@ -59,7 +59,7 @@ ai语音回复使用[TTS模型](https://platform.openai.com/docs/models/tts)将g
 > - 偶尔会出现ai画图和语音回复无响应, 请重新登录
 > - 若出现登录失败请尝试以下操作
 >   - 再试一次?
-> 	- 清除缓存(cache文件夹) 更换qq登录协议后重试
+> 	- 清除缓存(cache文件夹) [更换qq登录协议](https://github.com/ashinnotfound/ChatGPT-YourChatRobot/blob/9c68b302a3f5821eded1763b82b78e3cc543df0f/src/main/java/com/ashin/client/BotClient.java#L50C94-L50C94)后重试
 >   - 清除缓存(cache文件夹) 更换网络环境后重试
 >   - ~~骂腾讯风控😡~~
 
