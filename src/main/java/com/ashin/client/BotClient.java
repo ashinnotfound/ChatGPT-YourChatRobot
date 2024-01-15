@@ -7,6 +7,7 @@ import com.ashin.config.WechatConfig;
 import com.ashin.handler.QqMessageHandler;
 import com.ashin.handler.WechatMessageHandler;
 import com.ashin.service.InteractService;
+import com.ashin.service.TriggerService;
 import com.ashin.util.BotUtil;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -32,6 +33,8 @@ public class BotClient {
     @Resource
     private InteractService interactService;
     @Resource
+    private TriggerService triggerService;
+    @Resource
     private KeywordConfig keywordConfig;
     @Resource
     private BotUtil botUtil;
@@ -41,7 +44,7 @@ public class BotClient {
         //微信
         if (wechatConfig.getEnable()){
             log.info("正在登录微信,请按提示操作：");
-            wechatBot = new Wechat(new WechatMessageHandler(interactService, keywordConfig, botUtil), wechatConfig.getQrPath());
+            wechatBot = new Wechat(new WechatMessageHandler(interactService, keywordConfig, triggerService, botUtil), wechatConfig.getQrPath());
             wechatBot.start();
         }
         if (qqConfig.getEnable()) {
@@ -56,7 +59,7 @@ public class BotClient {
                 qqBot.login();
                 log.info("成功登录账号为 {} 的qq, 登陆协议为 {}", qqConfig.getAccount(), miraiProtocol);
                 //订阅监听事件
-                qqBot.getEventChannel().registerListenerHost(new QqMessageHandler(interactService, qqConfig, keywordConfig, botUtil));
+                qqBot.getEventChannel().registerListenerHost(new QqMessageHandler(interactService, qqConfig, keywordConfig, botUtil, triggerService));
             } catch (Exception e) {
                 log.error("登陆失败, qq账号为 {}, 登陆协议为 {}, 可尝试更换登陆协议, 具体原因: {}", qqConfig.getAccount(), miraiProtocol, e.getMessage());
             }
