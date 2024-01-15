@@ -1,11 +1,11 @@
 # ChatGPT-YourChatRobot
 
-> ### NEWS: 现在你可以在qq让GPT用语音回复你啦
-> - ai画图使用[DALL·E-3模型](https://platform.openai.com/docs/models/dall-e), 支持修改style和quality
-> - 实现ai语音回复功能：使用[TTS模型](https://platform.openai.com/docs/models/tts)将gpt的回答转换为语音
-> - 无需为此功能额外配置apikey, 使用原先的即可
-    > ![](https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/060f61de58ff2bfac9c31eb43935071.jpg)
-    > --- 2023.12.7
+> ### NEWS: 新年快乐!!!现在你可以使用第三方GPT服务了🤗
+> how to: 修改gpt.baseUrl配置项即可使用第三方apikey
+>
+> ![image-20240115114827781](https://cdn.jsdelivr.net/gh/ashinnotfound/ImageHosting/img/image-20240115114827781.png)
+>
+> --- 2024.1.15
 
 ## 简介
 
@@ -28,15 +28,6 @@ qq机器人实现基于[TheoKanning/openai-java](https://github.com/TheoKanning/
 🌹🌹🌹感谢[acheong08/ChatGPT](https://github.com/acheong08/ChatGPT)、[PlexPt/chatgpt-java](https://github.com/PlexPt/chatgpt-java)、[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)、[mamoe/mirai](https://github.com/mamoe/mirai.git)
 和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos) 🌹🌹🌹
 
-## 原理
-
-使用mirai/itchat登录qq/微信并监听消息->调用openai接口将消息向gpt提问->使用mirai/itchat在qq/微信里回复gpt的回答
-
-ai画图采用[DALL·E模型](https://platform.openai.com/docs/models/dall-e)
-的[generation方法](https://platform.openai.com/docs/guides/images/generations)
-
-ai语音回复使用[TTS模型](https://platform.openai.com/docs/models/tts)将gpt的回答转换为语音
-
 ## 一些特性 or TODO
 
 | 功能                                   | QQ机器人 | 微信机器人        |
@@ -47,12 +38,20 @@ ai语音回复使用[TTS模型](https://platform.openai.com/docs/models/tts)将g
 | 引用回复                                 | ✔️    | ❌            |
 | 使用多apikey                            | ✔️    | ✔️           |
 | 重置会话                                 | ✔️    | ✔️           |
-| 第三方/免apikey                          | 计划🥳  | 计划🥳         |
+| 第三方GPT                               | ✔️    | ✔️           |
 | 网页控制台                                | 计划🥳  | 计划🥳         |
+
+## 原理
+
+使用mirai/itchat登录qq/微信并监听消息->调用openai接口将消息向gpt提问->使用mirai/itchat在qq/微信里回复gpt的回答
+
+ai画图采用[DALL·E模型](https://platform.openai.com/docs/models/dall-e)的[generation方法](https://platform.openai.com/docs/guides/images/generations)
+
+ai语音回复使用[TTS模型](https://platform.openai.com/docs/models/tts)将gpt的回答转换为语音
 
 ### 你可能需要了解:
 
-> - 获取apiKey https://platform.openai.com/account/api-keys
+> - 获取官方apiKey https://platform.openai.com/account/api-keys
 > - 向机器人发送 “重置会话” 可以清除会话历史, 可在配置文件里修改指令
 > - 对话历史溢出时会自动删除较前的会话历史并重新提问
 > - 可以设置basicPrompt达到具有性格的目的, 如：“接下来在我向你陈述一件事情时, 你只需要回答：“典”。”
@@ -60,7 +59,7 @@ ai语音回复使用[TTS模型](https://platform.openai.com/docs/models/tts)将g
 > - 偶尔会出现ai画图和语音回复无响应, 请重新登录
 > - 若出现登录失败请尝试以下操作
 >   - 再试一次?
->   - 清除缓存(cache文件夹) 更换协议后重试
+> 	- 清除缓存(cache文件夹) 更换qq登录协议后重试
 >   - 清除缓存(cache文件夹) 更换网络环境后重试
 >   - ~~骂腾讯风控😡~~
 
@@ -93,6 +92,9 @@ proxy:
   port:
 
 gpt:
+  # 如果你使用了第三方GPT 请修改baseUrl
+  # (OPENAI官方地址 https://api.openai.com/)
+  baseUrl: https://api.openai.com/
   # 使用的 chat 模型 如gpt-3.5-turbo/gpt-4 (https://platform.openai.com/docs/models/models)
   model: gpt-3.5-turbo
   # 最大token限制 越多的token意味着越多的花费(gpt-3.5-turbo上限为4096token, gpt-4则为8192)
@@ -157,6 +159,14 @@ tips：机器人响应速度与你的网络环境挂钩。
 <details>
 
 <summary></summary>
+
+### v3.9.1 (Jan 15, 2024)
+
+- 增加对第三方GPT服务的支持
+- qq机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)
+  和[mamoe/mirai](https://github.com/mamoe/mirai.git)
+- 微信机器人基于[TheoKanning/openai-java](https://github.com/TheoKanning/openai-java)
+  和[wxmbaci/itchat4j-uos](https://github.com/wxmbaci/itchat4j-uos)
 
 ### v3.9 (DEC 7, 2023)
 
