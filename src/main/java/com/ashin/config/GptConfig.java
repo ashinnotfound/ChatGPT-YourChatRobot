@@ -16,6 +16,7 @@ import java.util.List;
 @Component
 @ConfigurationProperties("gpt")
 public class GptConfig {
+    private String baseUrl;
     private String model;
     private Integer maxToken;
     private Double temperature;
