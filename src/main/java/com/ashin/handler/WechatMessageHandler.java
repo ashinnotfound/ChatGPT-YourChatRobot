@@ -4,6 +4,7 @@ import com.ashin.config.KeywordConfig;
 import com.ashin.constant.ChatType;
 import com.ashin.entity.bo.ChatBO;
 import com.ashin.service.InteractService;
+import com.ashin.service.TriggerService;
 import com.ashin.util.BotUtil;
 import cn.zhouyafeng.itchat4j.beans.BaseMsg;
 import cn.zhouyafeng.itchat4j.core.Core;
@@ -17,12 +18,14 @@ import cn.zhouyafeng.itchat4j.face.IMsgHandlerFace;
  */
 public class WechatMessageHandler implements IMsgHandlerFace {
     private final InteractService interactService;
+    private final TriggerService triggerService;
     private final KeywordConfig keywordConfig;
     private final BotUtil botUtil;
 
-    public WechatMessageHandler(InteractService interactService, KeywordConfig keywordConfig, BotUtil botUtil) {
+    public WechatMessageHandler(InteractService interactService, KeywordConfig keywordConfig, TriggerService triggerService, BotUtil botUtil) {
         this.interactService = interactService;
         this.keywordConfig = keywordConfig;
+        this.triggerService = triggerService;
         this.botUtil = botUtil;
     }
 
@@ -30,17 +33,20 @@ public class WechatMessageHandler implements IMsgHandlerFace {
     public String textMsgHandle(BaseMsg baseMsg) {
         //如果是在群聊
         if (baseMsg.isGroupMsg()){
+            //去除@再提问
+            String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName() + " ", "").trim();
             //存在@机器人的消息就向ChatGPT提问
             if (baseMsg.getText().contains("@"+ Core.getInstance().getNickName())){
-                //去除@再提问
-                String prompt = baseMsg.getText().replace("@"+ Core.getInstance().getNickName() + " ", "").trim();
-                return textResponse(baseMsg.getFromUserName(), prompt);
+                String triggerResponse = triggerService.getResponse(prompt);
+                return (triggerResponse == null) ? textResponse(baseMsg.getFromUserName(), prompt) : triggerResponse;
+            } else {
+                return triggerService.getResponse(baseMsg.getText());
             }
-        }else {
-            //不是在群聊 则直接回复
-            return textResponse(baseMsg.getFromUserName(), baseMsg.getText());
+        } else {
+            // 不是在群聊 则直接回复
+            String triggerResponse = triggerService.getResponse(baseMsg.getText());
+            return (triggerResponse == null) ? textResponse(baseMsg.getFromUserName(), baseMsg.getText()) : triggerResponse;
         }
-        return null;
     }
 
     private String textResponse(String userName, String content) {
