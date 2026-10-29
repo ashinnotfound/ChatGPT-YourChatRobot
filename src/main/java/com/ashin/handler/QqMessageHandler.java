@@ -105,6 +105,7 @@ public class QqMessageHandler implements ListenerHost {
                                         .append("ai画图失败, 以下图片url: ").append(response.getStringResult())
                                         .build()
                         );
+                        return;
                     }
                     try (InputStream inputStream = response.getInputStreamResult()) {
                         event.getSubject().sendMessage(
@@ -125,6 +126,7 @@ public class QqMessageHandler implements ListenerHost {
                 case AUDIO:
                     if (response.getBytesResult() == null) {
                         event.getSubject().sendMessage("语音回复失败, 以下为文本回复: " + response.getStringResult());
+                        return;
                     }
                     OfflineAudio audio = null;
                     byte[] audioBytes = response.getBytesResult();
